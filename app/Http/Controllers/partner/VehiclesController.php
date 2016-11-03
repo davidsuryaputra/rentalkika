@@ -1,0 +1,156 @@
+<?php
+
+namespace App\Http\Controllers\partner;
+
+use Illuminate\Http\Request;
+
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+
+use App\Models\Vehicle;
+use App\Models\Vehicle_galery;
+use App\Models\Car;
+
+use Intervention\Image\Facades\Image;
+
+use App\Http\Requests\VehicleRequest;
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+
+class VehiclesController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $vehicles = Vehicle::all();
+        return view('backend.partner.vehicles.index', compact('vehicles'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $cars = Car::all();
+        return view('backend.partner.vehicles.create', compact('cars'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(VehicleRequest $request)
+    {
+    	if($request->hasFile('foto')) {
+    		$fileName = rand(0, 99999).$request->file('foto')->getClientOriginalName();
+    		$request->file('foto')->move("images/vehicle/", $fileName);
+    		
+    		//resize
+    		$img = Image::make("images/vehicle/".$fileName);
+    		$img->resize('320', '240');
+    		$img->save();
+    	}
+    	
+        $vehicle = new Vehicle();
+        $vehicle->partner_id = Auth::user()->partner->id;
+        $vehicle->car_id = $request->car_name;
+        $vehicle->license_plate = $request->plat_nomor;
+        $vehicle->year = $request->car_year;
+        $vehicle->status = 'available';
+        $vehicle->save();
+        
+        $vehicleFoto = new Vehicle_galery();
+        $vehicleFoto->path = "images/vehicle/".$fileName;
+
+		$vehicle->galery()->save($vehicleFoto);        
+        
+        return redirect()->route('partner.vehicles.index')->with('success', 'Mobil berhasil ditambahkan.');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $vehicle = Vehicle::where('id', $id)->where('status', 'available')->first();
+        $cars = Car::all();
+        return view('backend.partner.vehicles.edit', compact('vehicle', 'cars'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(VehicleRequest $request, $id)
+    {
+        if($request->hasFile('foto')) {
+     		$fileName = rand(0, 99999).$request->file('foto')->getClientOriginalName();
+    		$request->file('foto')->move("images/vehicle/", $fileName);
+    		
+    		//resize
+    		$img = Image::make("images/vehicle/".$fileName);
+    		$img->resize('320', '240');
+    		$img->save();
+    	}
+    	
+        $vehicle = Vehicle::where('id', $id)->where('status', 'available')->first();
+        $vehicle->partner_id = Auth::user()->partner->id;
+        $vehicle->car_id = $request->car_name;
+        $vehicle->license_plate = $request->plat_nomor;
+        $vehicle->year = $request->car_year;
+        $vehicle->save();
+        
+        
+        $vehicleFoto = new Vehicle_gallery();
+        $vehicleFoto->path = "images/vehicle/".$fileName;
+
+		$vehicle->galery()->save($vehicleFoto);
+        
+        return redirect()->route('partner.vehicles.index')->with('success', 'Mobil berhasil diubah.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+		$vehicle = Vehicle::where('id', $id)->where('status', 'available')->first();
+		//dd(File::exists(public_path($vehicle->galery->path)));		
+		if(File::exists(public_path($vehicle->galery->path))){
+			File::delete(public_path($vehicle->galery->path));
+		}
+		$vehicle->galery()->delete();        
+        $vehicle->delete();
+        
+        return redirect()->route('partner.vehicles.index')->with('success', 'Mobil berhasil dihapus.');
+    }
+}

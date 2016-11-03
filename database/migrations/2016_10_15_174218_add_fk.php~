@@ -1,0 +1,228 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class AddFk extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('users', function (Blueprint $table){
+			       $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+
+      Schema::table('user_ability', function (Blueprint $table){
+  			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+  			$table->foreign('ability_id')->references('id')->on('abilities')->onDelete('cascade')->onUpdate('cascade');
+  		});
+
+	  Schema::table('cities', function (Blueprint $table){
+			$table->foreign('zone_id')->references('id')->on('zones')->onDelete('cascade')->onUpdate('cascade');	  
+	  });
+
+      //  Schema::table('abilities', function (Blueprint $table){
+			//$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+      //  });
+      //
+
+        Schema::table('posts', function (Blueprint $table){
+			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+
+        Schema::table('partners', function (Blueprint $table){
+        	$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+        	$table->foreign('zone_id')->references('id')->on('zones')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+
+        Schema::table('partner_galeries', function (Blueprint $table){
+			$table->foreign('partner_id')->references('id')->on('partners')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+        Schema::table('partner_city', function (Blueprint $table){
+			$table->foreign('partner_id')->references('id')->on('partners')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+        Schema::table('partner_units', function (Blueprint $table){
+			$table->foreign('partner_id')->references('id')->on('partners')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('car_id')->references('id')->on('cars')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('zone_id')->references('id')->on('zones')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+        Schema::table('partner_unit_galeries', function (Blueprint $table){
+			$table->foreign('partner_unit_id')->references('id')->on('partner_units')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+        Schema::table('routes', function (Blueprint $table){
+        	$table->foreign('zone_id')->references('id')->on('zones')->onDelete('cascade')->onUpdate('cascade');
+        	$table->foreign('from_city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
+        	$table->foreign('to_city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+        Schema::table('cars', function (Blueprint $table){
+			$table->foreign('car_class_id')->references('id')->on('car_classes')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('car_brand_id')->references('id')->on('car_brands')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+        Schema::table('pricings', function (Blueprint $table){
+			$table->foreign('zone_id')->references('id')->on('zones')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('route_id')->references('id')->on('routes')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+        Schema::table('pricing_options', function (Blueprint $table){
+			$table->foreign('zone_id')->references('id')->on('zones')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('pricing_id')->references('id')->on('pricings')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+        Schema::table('orders', function (Blueprint $table){
+			$table->foreign('partner_id')->references('id')->on('partners')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('client_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('partner_unit_id')->references('id')->on('partner_units')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('route_id')->references('id')->on('routes')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('pricing_id')->references('id')->on('pricings')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('coupon_id')->references('id')->on('coupons')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+        Schema::table('order_pricing_option', function (Blueprint $table){
+			$table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('pricing_option_id')->references('id')->on('pricing_options')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+        Schema::table('order_rent_car_services', function (Blueprint $table){
+			$table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+        Schema::table('order_feeder_services', function (Blueprint $table){
+			$table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+        Schema::table('order_tax', function (Blueprint $table){
+			$table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('tax_id')->references('id')->on('taxes')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+        Schema::table('order_confirmations', function (Blueprint $table){
+			$table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('bank_id')->references('id')->on('banks')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+    	Schema::table('users', function (Blueprint $table){
+			$table->dropForeign(['role_id']);
+		});
+
+		Schema::table('user_ability', function (Blueprint $table){
+			$table->dropForeign(['user_id']);
+			$table->dropForeign(['ability_id']);
+		});
+
+
+		Schema::table('cities', function (Blueprint $table) {
+			$table->dropForeign(['zone_id']);		
+		});
+		
+		//Schema::table('abilities', function (Blueprint $table){
+		//	$table->dropForeign(['user_id']);
+		//});
+
+
+		Schema::table('posts', function (Blueprint $table){
+			$table->dropForeign(['user_id']);
+		});
+
+
+		Schema::table('partners', function (Blueprint $table){
+  			$table->dropForeign(['user_id']);
+  			$table->dropForeign(['zone_id']);
+		});
+
+
+		Schema::table('partner_galeries', function (Blueprint $table){
+			$table->dropForeign(['partner_id']);
+		});
+
+		Schema::table('partner_city', function (Blueprint $table){
+			$table->dropForeign(['partner_id']);
+			$table->dropForeign(['city_id']);
+		});
+
+		Schema::table('partner_units', function (Blueprint $table){
+			$table->dropForeign(['partner_id']);
+			$table->dropForeign(['car_id']);
+			$table->dropForeign(['zone_id']);
+		});
+
+		Schema::table('partner_unit_galeries', function (Blueprint $table){
+			$table->dropForeign(['partner_unit_id']);
+		});
+
+		Schema::table('routes', function (Blueprint $table){
+  			$table->dropForeign(['zone_id']);
+  			$table->dropForeign(['from_city_id']);
+  			$table->dropForeign(['to_city_id']);
+		});
+
+		Schema::table('cars', function (Blueprint $table){
+			$table->dropForeign(['car_class_id']);
+			$table->dropForeign(['car_brand_id']);
+		});
+
+		Schema::table('pricings', function (Blueprint $table){
+			$table->dropForeign(['zone_id']);
+			$table->dropForeign(['route_id']);
+		});
+
+		Schema::table('pricing_options', function (Blueprint $table){
+			$table->dropForeign(['zone_id']);
+		});
+
+		Schema::table('orders', function (Blueprint $table){
+			$table->dropForeign(['partner_id']);
+			$table->dropForeign(['client_id']);
+			$table->dropForeign(['partner_unit_id']);
+			$table->dropForeign(['route_id']);
+			$table->dropForeign(['pricing_id']);
+			$table->dropForeign(['coupon_id']);
+		});
+
+		Schema::table('order_pricing_option', function (Blueprint $table){
+			$table->dropForeign(['order_id']);
+			$table->dropForeign(['pricing_option_id']);
+		});
+
+		Schema::table('order_rent_car_services', function (Blueprint $table){
+			$table->dropForeign(['order_id']);
+		});
+
+		Schema::table('order_feeder_services', function (Blueprint $table){
+			$table->dropForeign(['order_id']);
+		});
+
+		Schema::table('order_tax', function (Blueprint $table){
+			$table->dropForeign(['order_id']);
+			$table->dropForeign(['tax_id']);
+		});
+
+		Schema::table('order_confirmations', function (Blueprint $table){
+			$table->dropForeign(['order_id']);
+			$table->dropForeign(['bank_id']);
+		});
+
+    }
+}

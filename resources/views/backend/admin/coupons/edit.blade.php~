@@ -1,0 +1,161 @@
+@extends('backend.layouts.adminMenu')
+
+@section('style')
+	@parent
+	<!-- daterange picker -->
+  	<link rel="stylesheet" href="{{ url('plugins/daterangepicker/daterangepicker-bs3.css') }}">
+@stop
+
+@section('content')
+<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      Admin
+      <small>Control panel</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">Beranda</li>
+    </ol>
+  </section>
+
+    <!-- Main content -->
+  <section class="content">
+    <div class="box box-warning">
+          <div class="box-header with-border">
+            <h3 class="box-title">Edit Kupon</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <form role="form" action="{{ route('admin.coupons.update', $coupon->id) }}" method="POST">
+              {{ csrf_field() }}
+              <!-- text input -->
+              <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
+                <label>Nama Kupon</label>
+                <input class="form-control" placeholder="Kupon Tahun Baru" name="name" value="{{ $coupon->name }}" type="text">
+				
+           		@if($errors->has('name'))
+                <label class="control-label">
+                <i class="fa fa-times-circle-o"></i>
+                {{ $errors->first('name') }}
+                </label>
+                @endif
+                
+              </div>
+
+              <div class="form-group {{ $errors->has('code') ? 'has-error' : '' }}">
+                <label>Kode Kupon</label>
+                <input class="form-control" name="code" placeholder="#RentKikaNewYear17" value="{{ $coupon->code }}" type="text">
+				
+				@if($errors->has('code'))
+                <label class="control-label">
+                <i class="fa fa-times-circle-o"></i>
+                {{ $errors->first('code') }}
+                </label>
+                @endif
+                
+              </div>
+
+          	  <div class="form-group {{ $errors->has('masaberlaku') ? 'has-error' : '' }}">
+                <label>Masa berlaku:</label>
+
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                  <input type="text" class="form-control pull-right active" value="{{ $masaberlaku }}" name="masaberlaku" id="masaberlaku">
+                </div>
+                <!-- /.input group -->
+                
+                @if($errors->has('masaberlaku'))
+				<label class="control-llabel">
+				<i class="fa fa-times-circle-o"></i>
+				{{ $errors->first('masaberlaku') }}				
+				</label>                
+                @endif
+              </div>
+              
+			  <div class="form-group {{ $errors->has('fixedRadios') ? 'has-error' : '' }}">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="fixedRadios" id="fixed" value="1" checked="">
+                      Fix
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="fixedRadios" id="persen" value="0">
+                      Persen
+                    </label>
+                  </div>
+                  
+                    @if($errors->has('fixedRadios'))
+					<label class="control-llabel">
+					<i class="fa fa-times-circle-o"></i>
+					{{ $errors->first('fixedRadios') }}				
+					</label>                
+	                @endif
+                </div>
+                
+               <div class="form-group {{ $errors->has('value') ? 'has-error' : '' }}">
+                <label>Nilai Kupon</label>
+                <input class="form-control" name="value" value="{{ old('value') or $coupon->value }}" type="text">
+				
+				@if($errors->has('value'))
+                <label class="control-label">
+                <i class="fa fa-times-circle-o"></i>
+                {{ $errors->first('value') }}
+                </label>
+                @endif
+                
+              </div>
+
+              <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Update</button>
+              </div>
+
+            </form>
+          </div>
+          <!-- /.box-body -->
+        </div>
+  </section>
+
+  <!-- /.content -->
+  
+</div>
+
+  <!-- /.content-wrapper -->
+@endsection
+
+@section('script')
+	@parent
+	<!-- date-range-picker -->
+<script src="{{ url('plugins/moment.min.js') }}"></script>
+<script src="{{ url('plugins/daterangepicker/daterangepicker.js') }}"></script>
+<script>
+$(function () {
+	//Date range picker
+    $('#masaberlaku').daterangepicker({
+		format: 'DD/MM/YYYY',    
+    });
+    if({{ $coupon->is_fixed }} == 1){
+    	$('#fixed').attr('checked', true);
+    }else{
+    	$('#percen').attr('checked', true);
+    }
+    
+    $('input[name="fixedRadios"]').change( function () {
+    if($(this).val() != 0){
+	$('input[name="value"]').attr('placeholder', 'Nominal fix yang diinginkan ex: 50000');  
+    }else{
+    $('input[name="value"]').attr('placeholder', 'Angka antara 1 - 100 tanpa tanda %');
+    }
+    });
+    
+
+});
+
+</script>
+@stop

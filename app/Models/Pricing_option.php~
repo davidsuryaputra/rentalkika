@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Pricing_option extends Model
+{
+    protected $fillable = [
+		'zone_id',
+		'name',
+		'value',
+    ];
+    
+    public function zone(){
+		return $this->belongsTo(Zone::class);    
+    }
+}

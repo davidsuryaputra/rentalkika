@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+
+class HomeController extends Controller
+{
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+       $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+    	//dd(Auth::user()->role->name);
+    	/*if(Session::has('message')){
+			return Session::get('message');    	
+    	}
+		return "welcome to dashboard ".Auth::user()->role->name;*/    	   
+       
+	   if(Auth::user()->can("access.backend.customer")){
+      		//return redirect('/customer');
+      		return view('backend.customer.index'); 
+       }else if(Auth::user()->can("access.backend.partner")){
+			//return redirect('/partner');  
+			return view('backend.partner.index');          
+       }
+       else{
+			return view('backend.admin.index');           
+       }
+       
+    }
+}

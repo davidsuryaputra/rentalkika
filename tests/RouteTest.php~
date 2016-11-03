@@ -1,0 +1,20 @@
+<?php
+
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
+class RouteTest extends TestCase
+{
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function test_front_end_route()
+    {
+        $this->visit('/')->assertResponseOk();
+        $this->call('POST', '/login')->assertResponseStatus(200);
+        //$this->assertEquals(200, $post->status());
+    }
+}

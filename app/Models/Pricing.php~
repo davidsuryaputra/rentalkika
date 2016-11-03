@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Pricing extends Model
+{
+	public $timestamps = false;	
+	
+    protected $fillable = [
+		'zone_id',
+		'is_short_time',
+		'is_service_feeder',
+		'route_id',
+		'value',    
+    ];
+    
+    public function route()
+    {
+		return $this->hasOne(Route::class);    
+    }
+    
+    public function zone()
+    {
+		return $this->belongsTo(Zone::class);    
+    }
+}

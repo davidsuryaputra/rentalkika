@@ -1,0 +1,11 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class tr_antar_jemput_confirmation extends Model
+{
+    protected $table = 'tr_antar_jemput';
+    protected $fillable = ['tr_antar_jemput_id', 'bank_id', 'payment_proof'];
+}

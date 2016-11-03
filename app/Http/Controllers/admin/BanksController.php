@@ -1,0 +1,106 @@
+<?php
+
+namespace App\Http\Controllers\admin;
+
+use Illuminate\Http\Request;
+
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+
+use App\Http\Requests\CreateBankRequest;
+use App\Models\Bank;
+
+class BanksController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+    	$banks = Bank::all();
+        return view('backend.admin.banks.index', compact('banks'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('backend.admin.banks.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(CreateBankRequest $request)
+    {
+        Bank::create([
+			'bank_name' => $request->bank_name,
+			'bank_branch' => $request->bank_branch,
+			'account_name' => $request->account_name,
+			'account_number' => $request->account_number,
+        ]);
+        return redirect()->route('admin.banks.index')->with('success', 'Rekening berhasil disimpan.');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $bank = Bank::find($id);
+        return view('backend.admin.banks.edit', compact('bank'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(CreateBankRequest $request, $id)
+    {
+        $bank = Bank::find($id);
+        $bank->bank_name = $request->bank_name;
+        $bank->bank_branch = $request->bank_branch;
+        $bank->account_number = $request->account_number;
+        $bank->account_name = $request->account_name;
+        $bank->save();
+        
+        return redirect()->route('admin.banks.index')->with('success', 'Rekening berhasil diupdate.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        Bank::destroy($id);
+        return redirect()->route('admin.banks.index')->with('success', 'Rekeing berhasil dihapus.');
+    }
+}

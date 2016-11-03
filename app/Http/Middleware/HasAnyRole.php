@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+
+class HasAnyRole
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
+     */
+    public function handle($request, Closure $next, $role)
+    {
+		$permissions = Auth::user()->permissions;
+		if($permissions->contains('name', 'access.backend.admin') == true){
+			$loggedInRole = 'access.backend.admin';		
+		}else if($permissions->contains('name', 'access.backend.customer') == true) {
+			$loggedInRole = 'access.backend.customer';
+		}else {
+			$loggedInRole = 'access.backend.partner';		
+		}
+		
+				
+		//$loggedInRole = Auth::user()->role->name;
+		//$loggedInRole = 'admin';		
+		if($loggedInRole != $role){
+			//Session::flash('message', 'Permission Denied.');
+			return redirect('/home');
+			//return $loggedInRole." != ".$role;
+			//return "$loggedInRole kok akses halaman $role";	
+		}
+    	
+        return $next($request);
+    }
+}

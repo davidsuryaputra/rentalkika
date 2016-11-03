@@ -1,0 +1,40 @@
+<?php
+
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
+class PostsTest extends TestCase
+{
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function test_index_post()
+    {
+        $this->visit('/admin/posts')
+        ->assertResponseOk()
+        ->assertViewHasAll('posts');
+    }
+    
+    public function test_create_post()
+    {
+		$this->visit('/admin/posts/create')
+		->type('Judul', 'title')
+		->type('Ini Isi Text', 'content')
+		->press('Submit')
+		->seePageIs('/admin/posts')
+		->see('Post berhasil disimpan.');    
+    }
+    
+    public function test_create_post_blank()
+    {
+		$this->visit('/admin/posts/create')
+		->type('', 'title')
+		->type('', 'content')
+		->press('Submit')
+		->seePageIs('/admin/posts/create')
+		->see('required');    
+    }
+}

@@ -1,0 +1,249 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class AddFk extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+    	
+        Schema::table('users', function (Blueprint $table){
+			  $table->foreign('status_id')->references('id')->on('user_statuses')->onDelete('cascade')->onUpdate('cascade');
+        });
+		
+
+		/*
+      Schema::table('user_ability', function (Blueprint $table){
+  			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+  			$table->foreign('ability_id')->references('id')->on('abilities')->onDelete('cascade')->onUpdate('cascade');
+  		});
+  		*/
+
+	  Schema::table('cities', function (Blueprint $table){
+			$table->foreign('zone_id')->references('id')->on('zones')->onDelete('cascade')->onUpdate('cascade');	  
+	  });
+
+      //  Schema::table('abilities', function (Blueprint $table){
+			//$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+      //  });
+      //
+
+        Schema::table('posts', function (Blueprint $table){
+			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+
+        Schema::table('partners', function (Blueprint $table){
+        	$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+        	$table->foreign('zone_id')->references('id')->on('zones')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+
+        Schema::table('partner_galeries', function (Blueprint $table){
+			$table->foreign('partner_id')->references('id')->on('partners')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+        Schema::table('partner_city', function (Blueprint $table){
+			$table->foreign('partner_id')->references('id')->on('partners')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+        Schema::table('vehicles', function (Blueprint $table){
+			$table->foreign('partner_id')->references('id')->on('partners')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('car_id')->references('id')->on('cars')->onDelete('cascade')->onUpdate('cascade');
+			//$table->foreign('zone_id')->references('id')->on('zones')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+        Schema::table('vehicle_galeries', function (Blueprint $table){
+			$table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade')->onUpdate('cascade');
+        });
+
+		/*
+        Schema::table('routes', function (Blueprint $table){
+        	$table->foreign('zone_id')->references('id')->on('zones')->onDelete('cascade')->onUpdate('cascade');
+        	$table->foreign('from_city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
+        	$table->foreign('to_city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
+        });
+		*/
+
+        Schema::table('cars', function (Blueprint $table){
+			$table->foreign('car_class_id')->references('id')->on('car_classes')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('car_brand_id')->references('id')->on('car_brands')->onDelete('cascade')->onUpdate('cascade');
+        });
+        
+        Schema::table('harga_sewa', function (Blueprint $table) {
+        	$table->foreign('zone_id')->references('id')->on('zones')->onDelete('cascade')->onUpdate('cascade');
+        	$table->foreign('car_class_id')->references('id')->on('car_classes')->onDelete('cascade')->onUpdate('cascade');
+        });
+		
+		Schema::table('tr_sewa', function (Blueprint $table) {
+			$table->foreign('partner_id')->references('id')->on('partners')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('client_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('coupon_id')->references('id')->on('coupons')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('from_city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('to_city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('ppn')->references('id')->on('taxes')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('pph')->references('id')->on('taxes')->onDelete('cascade')->onUpdate('cascade');
+		});
+		
+		Schema::table('tr_sewa_harga_sewa', function (Blueprint $table) {
+			$table->foreign('tr_sewa_id')->references('id')->on('tr_sewa')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('harga_sewa_id')->references('id')->on('harga_sewa')->onDelete('cascade')->onUpdate('cascade');		
+		});
+		
+		Schema::table('tr_sewa_confirmation', function (Blueprint $table) {
+			$table->foreign('tr_sewa_id')->references('id')->on('tr_sewa')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('bank_id')->references('id')->on('banks')->onDelete('cascade')->onUpdate('cascade');
+		});
+
+		Schema::table('harga_antar_jemput', function (Blueprint $table){
+			$table->foreign('zone_id')->references('id')->on('zones')->onDelete('cascade')->onUpdate('cascade');
+		});
+		
+		Schema::table('tr_antar_jemput', function (Blueprint $table) {
+			$table->foreign('partner_id')->references('id')->on('partners')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('client_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('coupon_id')->references('id')->on('coupons')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('from_city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('to_city_id')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('ppn')->references('id')->on('taxes')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('pph')->references('id')->on('taxes')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('harga_antar_jemput_id')->references('id')->on('harga_antar_jemput')->onDelete('cascade')->onUpdate('cascade');
+		});
+		
+		Schema::table('tr_antar_jemput_confirmation', function (Blueprint $table) {
+			$table->foreign('tr_antar_jemput_id')->references('id')->on('tr_antar_jemput')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('bank_id')->references('id')->on('banks')->onDelete('cascade')->onUpdate('cascade');
+		});
+
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+    	
+    	Schema::table('users', function (Blueprint $table){
+			$table->dropForeign(['status_id']);
+		});
+		
+		/*
+		Schema::table('user_ability', function (Blueprint $table){
+			$table->dropForeign(['user_id']);
+			$table->dropForeign(['ability_id']);
+		});
+		*/
+
+
+		Schema::table('cities', function (Blueprint $table) {
+			$table->dropForeign(['zone_id']);		
+		});
+		
+		//Schema::table('abilities', function (Blueprint $table){
+		//	$table->dropForeign(['user_id']);
+		//});
+
+
+		Schema::table('posts', function (Blueprint $table){
+			$table->dropForeign(['user_id']);
+		});
+
+
+		Schema::table('partners', function (Blueprint $table){
+  			$table->dropForeign(['user_id']);
+  			$table->dropForeign(['zone_id']);
+		});
+
+
+		Schema::table('partner_galeries', function (Blueprint $table){
+			$table->dropForeign(['partner_id']);
+		});
+
+		Schema::table('partner_city', function (Blueprint $table){
+			$table->dropForeign(['partner_id']);
+			$table->dropForeign(['city_id']);
+		});
+
+		Schema::table('vehicles', function (Blueprint $table){
+			$table->dropForeign(['partner_id']);
+			$table->dropForeign(['car_id']);
+			//$table->dropForeign(['zone_id']);
+		});
+
+		Schema::table('vehicle_galeries', function (Blueprint $table){
+			$table->dropForeign(['vehicle_id']);
+		});
+
+		/*
+		Schema::table('routes', function (Blueprint $table){
+  			$table->dropForeign(['zone_id']);
+  			$table->dropForeign(['from_city_id']);
+  			$table->dropForeign(['to_city_id']);
+		});
+		*/
+
+		Schema::table('cars', function (Blueprint $table){
+			$table->dropForeign(['car_class_id']);
+			$table->dropForeign(['car_brand_id']);
+		});
+		
+		Schema::table('harga_sewa', function (Blueprint $table) {
+			$table->dropForeign(['zone_id']);
+			$table->dropForeign(['car_class_id']);	
+		});
+		
+		Schema::table('tr_sewa', function (Blueprint $table) {
+			$table->dropForeign(['partner_id']);		
+			$table->dropForeign(['client_id']);		
+			$table->dropForeign(['vehicle_id']);		
+			$table->dropForeign(['coupon_id']);		
+			$table->dropForeign(['from_city_id']);		
+			$table->dropForeign(['to_city_id']);
+			$table->dropForeign(['ppn']);
+			$table->dropForeign(['pph']);		
+		});
+		
+		Schema::table('tr_sewa_harga_sewa', function (Blueprint $table) {
+			$table->dropForeign(['tr_sewa_id']);
+			$table->dropForeign(['harga_sewa_id']);		
+		});
+		
+		Schema::table('tr_sewa_confirmation', function (Blueprint $table) {
+			$table->dropForeign(['tr_sewa_id']);
+			$table->dropForeign(['bank_id']);
+		});
+		
+		Schema::table('harga_antar_jemput', function (Blueprint $table) {
+			$table->dropForeign(['zone_id']);		
+		});
+		
+		Schema::table('tr_antar_jemput', function (Blueprint $table) {
+			$table->dropForeign(['partner_id']);		
+			$table->dropForeign(['client_id']);		
+			$table->dropForeign(['vehicle_id']);		
+			$table->dropForeign(['coupon_id']);		
+			$table->dropForeign(['from_city_id']);		
+			$table->dropForeign(['to_city_id']);
+			$table->dropForeign(['ppn']);
+			$table->dropForeign(['pph']);
+			$table->dropForeign(['harga_antar_jemput_id']);	
+		});
+		
+		Schema::table('tr_antar_jemput_confirmation', function (Blueprint $table){
+			$table->dropForeign(['tr_antar_jemput_id']);
+			$table->dropForeign(['bank_id']);		
+		});
+
+    }
+}

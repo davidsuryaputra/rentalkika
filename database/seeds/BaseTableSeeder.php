@@ -1,0 +1,166 @@
+<?php
+
+use Illuminate\Database\Seeder;
+use illuminate\Database\Schema\Blueprint;
+use App\Models\User;
+use App\Models\User_personal;
+use App\Models\User_company;
+use App\Models\Partner;
+
+class BaseTableSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+		DB::table('cities')->insert([
+			['id' => 1, 'name' => 'Surabaya'],		
+			['id' => 2, 'name' => 'Sidoarjo'],		
+			['id' => 3, 'name' => 'Malang'],
+			['id' => 4, 'name' => 'Gresik'],		
+			['id' => 5, 'name' => 'Madura'],		
+		]);    	
+    	
+        DB::table('roles')->insert([
+          ['id' => 1, 'name' => 'customer'],
+          ['id' => 2, 'name' => 'partner'],
+          ['id' => 3, 'name' => 'admin'],
+        ]);
+        
+        DB::table('permissions')->insert([
+			['name' => 'access.backend.customer'],       
+			['name' => 'access.backend.partner'],      
+			['name' => 'access.backend.admin'],       
+			['name' => 'index.post'],       
+			['name' => 'create.post'],       
+			['name' => 'edit.post'],       
+			['name' => 'delete.post'],       
+        ]);
+        
+        DB::table('user_statuses')->insert([
+        	['id' => 1, 'name' => 'pending'],
+        	['id' => 2, 'name' => 'waiting'],
+        	['id' => 3, 'name' => 'active'],
+        	['id' => 4, 'name' => 'banned'],
+        	['id' => 5, 'name' => 'declined'],
+        ]);
+        
+        /*
+        $role = App\Models\Role::where('name', 'admin')->first();
+        $role->addPermission('access.backend');
+        $role->addPermission('index.post');
+        $role->addPermission('create.post');
+        $role->addPermission('edit.post');
+        $role->addPermission('delete.post');
+        
+        $role = App\Models\Role::where('name', 'customer')->first();
+        $role->addPermission('access.backend.customer');
+        
+        $role = App\Models\Role::where('name', 'partner')->first();
+        $role->addPermission('access.backend.partner');
+        */
+
+        DB::table('taxes')->insert([
+          ['id' => 1, 'name' => 'ppn', 'value' => 10],
+          ['id' => 2, 'name' => 'pph', 'value' => 10],
+        ]);
+        
+        
+		
+		//cara 2
+		$userCustomerPersonal = new User();
+        $userCustomerPersonal->full_name = 'Customer Personal Full Name'; 
+        $userCustomerPersonal->address = 'JL. Kalijudan 226 D';
+        $userCustomerPersonal->phone = '085711894877';
+        $userCustomerPersonal->email = 'customer@personal.com';
+        $userCustomerPersonal->password = bcrypt('123456789');
+        $userCustomerPersonal->role = 'customer personal';
+        $userCustomerPersonal->status_id = 3;
+        $userCustomerPersonal->balance = 0;
+        
+        $personal = new User_personal();
+		$personal->family_name = 'Rizky Family Customer';        
+		$personal->family_address = 'JL. Kandangan';        
+		$personal->family_phone = '08579999'; 
+		
+        $userCustomerPersonal->save();		
+        $userCustomerPersonal->personal()->save($personal);
+        $userCustomerPersonal->tambahPermission('access.backend.customer');
+        
+        
+        $userCustomerCompany = new User();
+        $userCustomerCompany->full_name = 'PT. Maju Jaya';
+        $userCustomerCompany->address = 'JL. Wisata 66';
+        $userCustomerCompany->phone = '08575555';
+        $userCustomerCompany->email = 'customer@company.com';
+        $userCustomerCompany->password = bcrypt('123456789');
+        $userCustomerCompany->role = 'customer company';
+        $userCustomerCompany->status_id = 3;
+        $userCustomerCompany->balance = 0;
+        $userCustomerCompany->save();
+        
+        $company = new User_company();
+        $company->nama_direktur = 'Same Mark';
+        $userCustomerCompany->company()->save($company);
+        $userCustomerCompany->tambahPermission('access.backend.customer');
+        
+        
+        $userPartner = new User();
+		$userPartner->full_name = 'Partner Full Name';
+		$userPartner->address = 'JL. Kalijudan 226 D';
+		$userPartner->phone = 085711894877;
+		$userPartner->email = 'partner@kika.co.id';
+		$userPartner->password = bcrypt('123456789');
+		$userPartner->role = 'partner';
+		$userPartner->status_id = 3;
+		$userPartner->balance = 0;
+		$userPartner->save();
+		
+		$partner = new Partner();
+		$partner->nama_pemilik = 'Joko Budiono';
+		$userPartner->partner()->save($partner);
+		$userPartner->tambahPermission('access.backend.partner');
+		
+		
+		$userAdmin = new User();
+		$userAdmin->full_name = 'Admin Full Name';
+		$userAdmin->address = 'JL. Admin';
+		$userAdmin->phone = 08576666;
+		$userAdmin->email = 'admin@kika.co.id';
+		$userAdmin->password = bcrypt('123456789');
+		$userAdmin->role = 'admin';
+		$userAdmin->status_id = 3;
+		$userAdmin->balance = 0;
+		$userAdmin->save();
+		$userAdmin->tambahPermission('access.backend.admin');
+
+		
+		//$userPartner->assignRole('partner');
+		
+		//cara 1       
+        /* 
+        $userCustomerPersonal = new User();
+        $userCustomerPersonal->full_name = 'Customer Personal Full Name'; 
+        $userCustomerPersonal->address = 'JL. Kalijudan 226 D';
+        $userCustomerPersonal->phone = '085711894877';
+        $userCustomerPersonal->email = 'customer@personal.com';
+        $userCustomerPersonal->password = bcrypt('123456789');
+        $userCustomerPersonal->status_id = 3;
+        $userCustomerPersonal->balance = 0;
+        //$userCustomerPersonal->personal()->save($personal);
+        $userCustomerPersonal->save();
+        
+        
+        $personal = new User_personal();
+		$personal->family_name = 'Rizky Family Customer';        
+		$personal->family_address = 'JL. Kandangan';        
+		$personal->family_phone = '08579999'; 
+        $personal->user()->associate($userCustomerPersonal);
+		$personal->save();
+		*/
+		
+    }
+}

@@ -1,0 +1,65 @@
+<?php
+
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
+class BanksTest extends TestCase
+{
+	
+	use WithoutMiddleware;
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+     
+	public function test_index_bank(){
+		$this->visit('admin/bank')
+		->assertViewHas('banks');	
+	}    
+     
+    public function test_create_bank()
+    {
+        $this->visit('/admin/bank/create')
+        ->type('BCA', 'bank_name')
+        ->type('Cabang Mulyorejo', 'bank_branch')
+        ->type('5060047628', 'account_number')
+        ->type('David Surya Putra', 'account_name')
+        ->press('Submit')
+        ->seeInDatabase('banks', ['account_name' => 'David Surya Putra'])
+        ->seePageIs('/admin/bank')
+        ->see('Bank berhasil ditambahkan.');
+    }
+    
+    public function test_create_bank_blank()
+    {
+    	$this->visit('/admin/bank/create')
+    	->type('', 'bank_name')
+        ->type('', 'bank_branch')
+        ->type('', 'account_number')
+        ->type('', 'account_name')
+        ->press('Submit')
+        ->seePageIs('/admin/bank/create')
+        ->see('required');
+    }
+    
+    public function test_create_bank_wrong_input()
+    {
+		$this->visit('/admin/bank/create')
+		->type('88', 'bank_name')
+        ->type('88888', 'bank_branch')
+        ->type('Abc', 'account_number')
+        ->type('555', 'account_name')
+        ->press('Submit')   
+        ->seePageIs('/admin/bank/create')
+        ->see('must'); 
+    }
+    
+    /*public function test_edit_bank()
+    {
+		$this->visit('/admin/bank/')
+		->assertViewHas()
+		    
+    }*/
+}

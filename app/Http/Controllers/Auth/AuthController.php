@@ -1,0 +1,316 @@
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use App\Models\User;
+use App\Models\User_personal;
+use App\Models\User_company;
+use App\Models\Partner;
+
+use Mail;
+
+use Validator;
+use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
+use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Http\Request;
+
+use App\Http\Requests;
+use App\Http\Requests\PersonalUserRequest;
+use App\Http\Requests\CompanyUserRequest;
+use App\Http\Requests\PartnerUserRequest;
+use App\Http\Requests\LoginRequest;
+
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
+
+class AuthController extends Controller
+{
+    /*
+    |--------------------------------------------------------------------------
+    | Registration & Login Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller handles the registration of new users, as well as the
+    | authentication of existing users. By default, this controller uses
+    | a simple trait to add these behaviors. Why don't you explore it?
+    |
+    */
+
+    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+
+    /**
+     * Where to redirect users after login / registration.
+     *
+     * @var string
+     */
+     
+	//if(Auth::check() == true){
+    //	$anu = Auth::user()->role->name; 
+	//}    
+	
+    //protected $redirectTo = '/home';
+
+    /**
+     * Create a new authentication controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('guest', ['except' => 'logout']);
+    }
+
+    /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'required|confirmed|min:6',
+        ]);
+    }
+
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param  array  $data
+     * @return User
+     */
+    protected function create(array $data)
+    {
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+        ]);
+    }
+    
+    
+    public function login(LoginRequest $request)
+    {    
+    	//$password = bcrypt($request->password);
+    	//$data = ['email' => $request->email, 'password' => $password];
+    	if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
+			if(Auth::user()->status->name == 'active') {
+    			return redirect('/home');
+			}elseif(Auth::user()->status->name == 'pending'){
+				Auth::logout();
+				return redirect('/login')->with('error', 'Please activate your account.');    		
+    		}elseif(Auth::user()->status->name == 'banned') {
+				Auth::logout();
+				return redirect('/login')->with('error', 'Your account is banned. Please contact admin.');   		
+    		}elseif(Auth::user()->status->name == 'waiting') {
+    			Auth::logout();
+    			return redirect('/login')->with('error', 'Your account is waiting for approval.');
+    		}elseif(Auth::user()->status->name == 'declined') {
+    			Auth::logout();
+    			return redirect('/login')->with('error', 'Your account is declined.');
+    		}    	
+    	}
+    	return 'fail';
+    }
+    
+    
+    //if(Auth::attempt(['email' => $request->email, 'password' => bcrypt($request->password)])){
+    		
+		//	return redirect('/home');
+    		//return Auth::check();
+    		/*
+			if(Auth::user()->status->name == 'active') {
+    			return redirect('/home');
+			}
+			    		
+    		if(Auth::user()->status->name == 'pending'){
+				Auth::logout();
+				return redirect('/login')->with('error', 'Please activate your account.');    		
+    		}elseif(Auth::user()->status->name == 'banned') {
+				Auth::logout();
+				return redirect('/login')->with('error', 'Your account is banned. Please contact admin.');   		
+    		}elseif(Auth::user()->status->name == 'waiting') {
+    			Auth::logout();
+    			return redirect('/login')->with('error', 'Your account is waiting for approval.');
+    		}elseif(Auth::user()->status->name == 'declined') {
+    			Auth::logout();
+    			return redirect('/login')->with('error', 'Your account is declined.');
+    		}
+    		*/
+    		
+    	
+    	//}
+
+    public function register(PersonalUserRequest $request){
+
+        $file = $request->file('idcard');
+        $fullPathKtp = "images/personal/".rand(0, 99999).$file->getClientOriginalName();
+        if($request->hasFile('idcard') && $request->file('idcard')->isValid()){
+          $request->file('idcard')->move($fullPathKtp);
+        }
+        
+        $activation_code = str_random(30);
+
+		$userPersonal = new User();
+        $userPersonal->email = $request->email;
+        $userPersonal->password = bcrypt($request->password); 
+        $userPersonal->full_name = $request->full_name;
+        $userPersonal->address = $request->address;
+        $userPersonal->phone = $request->phone;
+        $userPersonal->activation_code = $activation_code;
+        $userPersonal->status_id = 1;
+        $userPersonal->balance = 0;
+        $userPersonal->save();
+        
+        $personal = new User_personal();
+        $personal->family_name = $request->family_name;
+        $personal->family_address = $request->family_address;
+        $personal->family_phone = $request->family_phone;
+        $personal->ktp = $fullPathKtp;
+        
+        $userPersonal->personal()->save($personal);
+        $userPersonal->tambahPermission('access.backend.customer');
+        
+        $data = ['full_name' => $request->full_name, 'link' => route('activation', $activation_code)];
+        
+        Mail::send('auth.emails.activation', $data, function ($mail) use ($request) {
+			$mail->to($request->email, $request->full_name);
+			$mail->from('no-reply@rentalkika.com', 'No Reply Rentalkika');
+			$mail->subject('RentalKika activation instruction');        
+        });	
+		        
+        Session::flash('success', 'Please check your email to activate your account.');
+        return redirect('/register');
+
+    }
+    
+    public function activation($code)
+    {
+    	$user = User::where('activation_code', $code)->first();
+    	if(!$user){
+    		return redirect('/')->with('error', 'Activation code not found.');
+    	}
+    	
+		$user->status_id = 3;
+		$user->activation_code = null;
+		$user->save();
+    
+    	return redirect('/login')->with('success', 'Your account activated.');
+		//if personal > active
+		//if partner > waiting
+		//if company > waiting
+    }
+    
+    public function showRegistrationCompanyForm()
+    {
+    	return view('auth.register_company');
+    }
+    
+    public function postRegistrationCompany(CompanyUserRequest $request)
+    {
+    	
+    	$ktp_direktur = $request->file('ktp_direktur');
+		$npwp_kantor = $request->file('npwp_kantor');
+		$surat_kantor = $request->file('surat_kantor');    	
+    	
+    	$fullPathKtpDirektur = "images/company/ktp_direktur/".rand(0, 99999).$ktp_direktur->getClientOriginalName();
+		$fullPathNpwpKantor = "images/company/npwp_kantor/".rand(0, 99999).$npwp_kantor->getClientOriginalName();
+		$fullPathSuratKantor = "images/company/surat_kantor/".rand(0, 99999).$surat_kantor->getClientOriginalName();    	
+    	
+    	if($request->hasFile('ktp_direktur') && $request->file('ktp_direktur')->isValid()) {
+    		$request->file('ktp_direktur')->move($fullPathKtpDirektur);
+    	}
+    	
+    	if($request->hasFile('npwp_kantor') && $request->file('npwp_kantor')->isValid()) {
+    		$request->file('npwp_kantor')->move($fullPathNpwpKantor);
+    	}
+    	
+    	if($request->hasFile('surat_kantor') && $request->file('surat_kantor')->isValid()) {
+    		$request->file('surat_kantor')->move($fullPathSuratKantor);
+    	}
+    	
+    	$activation_code = str_random(30);
+
+		$userCompany = new User();
+        $userCompany->email = $request->email;
+        $userCompany->password = bcrypt($request->password); 
+        $userCompany->full_name = $request->full_name;
+        $userCompany->address = $request->address;
+        $userCompany->phone = $request->phone;
+        $userCompany->activation_code = $activation_code;
+        $userCompany->status_id = 1;
+        $userCompany->balance = 0;
+        $userCompany->save();
+    
+		$company = new User_company();
+		$company->nama_direktur = $request->nama_direktur;
+		$company->ktp_direktur = $fullPathKtpDirektur;
+		$company->npwp_kantor = $fullPathNpwpKantor;
+		$company->surat_kantor = $fullPathSuratKantor;
+		
+		$userCompany->company()->save($company);
+		$userCompany->tambahPermission('access.backend.customer');
+		
+		$data = ['full_name' => $request->full_name, 'link' => route('activation', $activation_code)];		
+		
+		Mail::send('auth.emails.activation_company', $data, function ($mail) use ($request) {
+			$mail->to($request->email, $request->full_name);
+			$mail->from('no-reply@rentalkika.com', 'No Reply Rentalkika');
+			$mail->subject('RentalKika activation instruction');        
+        });	
+		        
+        Session::flash('success', 'Please check your email to follow next instruction.');
+        return redirect('/register');
+    
+    }
+    
+    public function showRegistrationPartnerForm()
+    {
+    	return view('auth.register_partner');
+    }
+    
+    public function postRegistrationPartner(PartnerUserRequest $request)
+    {
+		$ktp_pemilik = $request->file('ktp_pemilik');
+		$fullPathKtpPemilik = "images/partner/".rand(0, 99999).$ktp_pemilik->getClientOriginalName();
+		
+		if($request->hasFile('ktp_pemilik') && $request->file('ktp_pemilik')->isValid()) {
+			$request->file('ktp_pemilik')->move($fullpathKtpPemilik);
+		}    
+    
+    	$activation_code = str_random(0, 30);
+    	
+		$userPartner = new User();
+		$userPartner->full_name = $request->full_name;
+		$userPartner->address = $request->address;
+		$userPartner->phone = $request->phone;
+		$userPartner->email = $request->email;
+		$userPartner->password = bcrypt($request->password);
+		$userPartner->activation_code = $activation_code;		
+		$userPartner->status_id = 1;
+		$userPartner->balance = 0;
+		$userPartner->save();
+		
+		$partner = new Partner();
+		$partner->nama_pemilik = $request->nama_pemilik;
+		$partner->ktp_pemilik = $fullPathKtpPemilik;
+		
+		$userPartner->partner()->save($partner);
+		$userPartner->tambahPermission('access.backend.partner');
+		
+		$data = ['full_name' => $request->full_name, 'link' => route('activation', $activation_code)];		
+		
+		Mail::send('auth.emails.activation_partner', $data, function ($mail) use ($request) {
+			$mail->to($request->email, $request->full_name);
+			$mail->from('no-reply@rentalkika.com', 'No Reply Rentalkika');
+			$mail->subject('RentalKika activation instruction');        
+        });	
+		        
+        Session::flash('success', 'Please check your email to follow next instruction.');
+        return redirect('/register');
+    	
+    }
+}

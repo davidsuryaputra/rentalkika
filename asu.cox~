@@ -1,0 +1,53 @@
+/* OK
+pricings
+- zone_id
+- is_short_time
+- is_service_feeder
+- is_in_the_city
+- route_id
+- value
+
+pricing_options
+- zone_id
+- name -> luar kota, over, sopir, cancelation
+- value
+- is_fixed
+
+orders
+- partner_profile_id
+- client_id
+- partner_unit_id
+- route_id
+- pricing_id
+- coupon_id
+- status
+- total
+
+order_pricing_options
+- order_id
+- pricing_option_id
+
+order_rent_cars
+- order_id
+- service_date
+- service_expired_date
+- pickup
+- return
+- rent_time
+- over_time
+
+order_feeders
+- order_id
+- drop_address
+- total_passenger
+
+order_taxes
+- order_id
+- tax_id
+
+order_confirmations
+- order_id
+- bank_id
+- path ss
+- description down payment, pelunasan, full payment
+*/

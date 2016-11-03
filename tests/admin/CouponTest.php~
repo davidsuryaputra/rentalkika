@@ -1,0 +1,28 @@
+<?php
+
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
+class CouponTest extends TestCase
+{
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+     
+    public function test_index_coupon(){
+    	$this->visit('/admin/coupons')
+    	->assertResponseOk()
+    	->assertViewHas('coupons');
+    }
+    
+    /*
+    public function test_create_coupon()
+    {
+        $this->visit('/admin/coupons')
+        ->type('HUT ke-71', 'name')
+        ->type('#RentalKikaHUT71', 'code');
+    }*/
+}

@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Route extends Model
+{
+    protected $fillable = [
+		'zone_id',
+		'from_city_id',
+		'to_city_id',
+		'is_in_the_city',    
+    ];
+    
+    public function pricing(){
+		return $this->hasOne(Pricing::class);    
+    }
+    
+    public function zone(){
+		return $this->belongsTo(Zone::class);    
+    }
+    
+    public function city(){
+		return $this->belongsTo(City::class);    
+    }
+    
+    public function from_city(){
+		return $this->belongsTo(City::class, 'from_city_id');    
+    }
+    
+    public function to_city(){
+    	return $this->belongsTo(City::class);
+    }
+}

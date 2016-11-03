@@ -1,0 +1,44 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateTrSewaTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('tr_sewa', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('partner_id');
+            $table->unsignedInteger('client_id');
+            $table->unsignedInteger('vehicle_id');
+            $table->unsignedInteger('coupon_id');
+            $table->unsignedInteger('from_city_id');
+            $table->unsignedInteger('to_city_id');
+            $table->unsignedInteger('ppn');
+            $table->unsignedInteger('pph');
+            $table->timestamp('rent_start');
+            $table->timestamp('rent_expired');
+            $table->timestamp('rent_return')->nullable();
+            $table->string('take_at_pool');
+            $table->string('status');
+            $table->integer('total');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::drop('tr_sewa');
+    }
+}

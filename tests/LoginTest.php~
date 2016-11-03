@@ -1,0 +1,66 @@
+<?php
+
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
+class LoginTest extends TestCase
+{
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+     
+     use DatabaseMigrations;
+     
+    /*public function testCustomerLoginSuccess()
+    {
+        $this->visit('/login')
+        	->type('customer@kika.co.id', 'email')
+        	->type('123456789', 'password')
+        	->press('Login')
+        	->seePageIs('/customer')
+        	->see('Customer Login Success.');
+    }
+    
+    public function testPartnerLoginSuccess()
+    {
+		$this->visit('/login')
+			->type('partner@kika.co.id', 'email')
+			->type('123456789', 'password')
+			->press('Login')
+			->seePageIs('/partner')
+			->see('Partner Login Success.');
+    }*/
+    
+    public function testLoginBLank(){
+		$this->visit('/login')
+		->type('', 'email')
+		->type('', 'password')
+		->press('Login')
+		->seePageIs('/login')
+		->see('required');    
+    }
+    
+	public function testLoginWrongCredential()
+	{
+		$this->visit('/login')
+		->type('wrong@mail.com', 'email')
+		->type('wrongpass', 'password')
+		->press('Login')
+		->seePageIs('/login')
+		->see('do not match');
+	}
+	
+	/*
+	public function test_login_wrong_input()
+	{
+		$this->visit('/login')
+		->type('wrong', 'email')
+		->type('0000', 'password')
+		->press('Login')
+		->seePageIs('/login')
+		->see('field');	
+	}*/    
+}

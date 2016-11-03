@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
+class RegistrationTest extends TestCase
+{
+
+  //  use DatabaseMigrations;
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function testNewUserRegistration()
+    {
+        $this->visit('/register')
+          ->type('David Surya Putra', 'full_name')
+          ->type('JL. Kalijudan 226 D', 'address')
+          ->type('085711894877', 'phone')
+          ->type('Rizky Sugiarto', 'family_name')
+          ->type('JL. Kandangan', 'family_address')
+          ->type('085766669999', 'family_phone')
+          ->attach('/var/www/html/autodealer/images/pics/banner_car.jpg', 'idcard')
+          ->type('david.suryaputra@yahoo.co.id', 'email')
+          ->type('123456789', 'password')
+          ->type('123456789', 'password_confirmation')
+          ->press('Submit')
+          ->seeInDatabase('users', ['email' => 'david.suryaputra@yahoo.co.id', 'role_id' => 1, 'balance' => 0, 'status' => 'unconfirmed'])
+          ->seePageIs('/register')
+          ->see('Please check your email to activate your account.');
+    }
+}

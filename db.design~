@@ -1,0 +1,127 @@
+user_role
+user_ability
+user_post
+user_partner
+zone_partner
+partner_galery
+partner_city
+
+unit_fk
+order_fk
+
+users
+- email
+- username
+- full_name
+- address
+- phone
+- family_name
+- family_address
+- family_phone
+- idcard
+- status
+- balance
+- role_id
+
+roles
+- name admin, client, partner
+
+abilities
+- user_id
+- name view_x create_x dst
+
+posts
+- title
+- content
+- user_id
+
+zones
+- name
+
+
+coupons
+- name
+- code
+- value
+- start_date
+- expired_date
+- type fixed, percentage
+- description
+
+/* OK
+partners
+- user_id
+- zone_id
+- name
+- picture
+- phone
+- address
+
+partner_galeries
+- partner_id
+- title
+- description
+- path
+
+partner_city
+- partner_id
+- city_id
+
+city
+- name
+*/
+
+/*OK
+partner_units
+- partner_profile_id
+- is_feeder
+- car_id
+- route_id
+- passenger_capacity
+- license_plate
+- year
+- description
+- status
+
+unit_pictures
+- partner_unit_id
+- title
+- path
+
+routes
+- from
+- to
+X- destination_id is_in_the_city
+
+X unit_jobs
+- name rent car, feeder
+
+car_classes
+- name mpv, bus, suv, sedan
+
+car_brands
+- name
+
+cars
+- car_class_id
+- car_brand_id
+- name
+*/
+
+ratings
+- order_id
+- value
+- comment
+
+asu
+
+banks
+- bank_name
+- bank_branch
+- account_name
+- account_number
+
+fees
+- name ppn pph cancelation
+- value
+- description fixed percentage
