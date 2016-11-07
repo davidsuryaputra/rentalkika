@@ -36,9 +36,9 @@ class BaseTableSeeder extends Seeder
 		*/
     	
         DB::table('roles')->insert([
-          ['id' => 1, 'name' => 'customer'],
-          ['id' => 2, 'name' => 'partner'],
-          ['id' => 3, 'name' => 'admin'],
+          ['id' => '1', 'name' => 'customer'],
+          ['id' => '2', 'name' => 'partner'],
+          ['id' => '3', 'name' => 'admin'],
         ]);
         
         DB::table('permissions')->insert([
@@ -52,11 +52,11 @@ class BaseTableSeeder extends Seeder
         ]);
         
         DB::table('user_statuses')->insert([
-        	['id' => 1, 'name' => 'pending'],
-        	['id' => 2, 'name' => 'waiting'],
-        	['id' => 3, 'name' => 'active'],
-        	['id' => 4, 'name' => 'banned'],
-        	['id' => 5, 'name' => 'declined'],
+        	['id' => '1', 'name' => 'pending'],
+        	['id' => '2', 'name' => 'waiting'],
+        	['id' => '3', 'name' => 'active'],
+        	['id' => '4', 'name' => 'banned'],
+        	['id' => '5', 'name' => 'declined'],
         ]);
         
         /*
@@ -75,8 +75,8 @@ class BaseTableSeeder extends Seeder
         */
 
         DB::table('taxes')->insert([
-          ['id' => 1, 'name' => 'ppn', 'value' => 10],
-          ['id' => 2, 'name' => 'pph', 'value' => 10],
+          ['id' => '1', 'name' => 'ppn', 'value' => '10'],
+          ['id' => '2', 'name' => 'pph', 'value' => '10'],
         ]);
         
         $zone = new Zone();
@@ -100,8 +100,8 @@ class BaseTableSeeder extends Seeder
         $userCustomerPersonal->email = 'customer@personal.com';
         $userCustomerPersonal->password = bcrypt('123456789');
         $userCustomerPersonal->role = 'customer personal';
-        $userCustomerPersonal->status_id = 3;
-        $userCustomerPersonal->balance = 0;
+        $userCustomerPersonal->status_id = '3';
+        $userCustomerPersonal->balance = '0';
         
         $personal = new User_personal();
 		$personal->family_name = 'Rizky Family Customer';        
@@ -120,8 +120,8 @@ class BaseTableSeeder extends Seeder
         $userCustomerCompany->email = 'customer@company.com';
         $userCustomerCompany->password = bcrypt('123456789');
         $userCustomerCompany->role = 'customer company';
-        $userCustomerCompany->status_id = 3;
-        $userCustomerCompany->balance = 0;
+        $userCustomerCompany->status_id = '3';
+        $userCustomerCompany->balance = '0';
         $userCustomerCompany->save();
         
         $company = new User_company();
@@ -133,18 +133,18 @@ class BaseTableSeeder extends Seeder
         $userPartner = new User();
 		$userPartner->full_name = 'Partner Full Name';
 		$userPartner->address = 'JL. Kalijudan 226 D';
-		$userPartner->phone = 085711894877;
+		$userPartner->phone = '085711894877';
 		$userPartner->email = 'partner@kika.co.id';
 		$userPartner->password = bcrypt('123456789');
 		$userPartner->role = 'partner';
-		$userPartner->status_id = 3;
-		$userPartner->balance = 0;
+		$userPartner->status_id = '3';
+		$userPartner->balance = '0';
 		$userPartner->save();
 		
 		$partner = new Partner();
 		$partner->nama_pemilik = 'Joko Budiono';
-		$partner->zone_id = 1;
-		$partner->kota_pool = 1;
+		$partner->zone_id = '1';
+		$partner->kota_pool = '1';
 		$partner->alamat_pool = 'JL. Pool';
 		$userPartner->partner()->save($partner);
 		$userPartner->tambahPermission('access.backend.partner');
@@ -153,12 +153,12 @@ class BaseTableSeeder extends Seeder
 		$userAdmin = new User();
 		$userAdmin->full_name = 'Admin Full Name';
 		$userAdmin->address = 'JL. Admin';
-		$userAdmin->phone = 08576666;
+		$userAdmin->phone = '08576666';
 		$userAdmin->email = 'admin@kika.co.id';
 		$userAdmin->password = bcrypt('123456789');
 		$userAdmin->role = 'admin';
-		$userAdmin->status_id = 3;
-		$userAdmin->balance = 0;
+		$userAdmin->status_id = '3';
+		$userAdmin->balance = '0';
 		$userAdmin->save();
 		$userAdmin->tambahPermission('access.backend.admin');
 
@@ -209,10 +209,10 @@ class BaseTableSeeder extends Seeder
 		
 		
 		$vehicle = new Vehicle();
-		$vehicle->partner_id = 1;
-		$vehicle->car_id = 1;
-		$vehicle->zone_id = 1;
-		$vehicle->car_class_id = 1;
+		$vehicle->partner_id = '1';
+		$vehicle->car_id = '1';
+		$vehicle->zone_id = '1';
+		$vehicle->car_class_id = '1';
 		$vehicle->license_plate = 'L 5758 X';
 		$vehicle->status = 'available';
 		$vehicle->year = '2013';
@@ -235,10 +235,10 @@ class BaseTableSeeder extends Seeder
 		$car->save();
 		
 		$vehicle = new Vehicle();
-		$vehicle->partner_id = 1;
-		$vehicle->car_id = 2;
-		$vehicle->zone_id = 1;
-		$vehicle->car_class_id = 2;
+		$vehicle->partner_id = '1';
+		$vehicle->car_id = '2';
+		$vehicle->zone_id = '1';
+		$vehicle->car_class_id = '2';
 		$vehicle->license_plate = 'L 5756 X';
 		$vehicle->year = '2012';
 		$vehicle->status = 'available';
@@ -247,65 +247,65 @@ class BaseTableSeeder extends Seeder
 		
 		
 		$harga_sewa = new Harga_sewa();
-		$harga_sewa->zone_id = 1;
-		$harga_sewa->car_class_id = 1;
-		$harga_sewa->value = 3500;
+		$harga_sewa->zone_id = '1';
+		$harga_sewa->car_class_id = '1';
+		$harga_sewa->value = '3500';
 		$harga_sewa->description = 'sopir';
 		$harga_sewa->save();
 		
 		$harga_sewa = new Harga_sewa();
-		$harga_sewa->zone_id = 1;
-		$harga_sewa->car_class_id = 1;
-		$harga_sewa->value = 3500;
+		$harga_sewa->zone_id = '1';
+		$harga_sewa->car_class_id = '1';
+		$harga_sewa->value = '3500';
 		$harga_sewa->description = 'luar kota';
 		$harga_sewa->save();
 		
 		$harga_sewa = new Harga_sewa();
-		$harga_sewa->zone_id = 1;
-		$harga_sewa->car_class_id = 1;
-		$harga_sewa->value = 35000;
+		$harga_sewa->zone_id = '1';
+		$harga_sewa->car_class_id = '1';
+		$harga_sewa->value = '35000';
 		$harga_sewa->description = 'overtime';
 		$harga_sewa->save();
 		
 		$harga_sewa = new Harga_sewa();
-		$harga_sewa->zone_id = 1;
-		$harga_sewa->car_class_id = 1;
-		$harga_sewa->value = 350000;
+		$harga_sewa->zone_id = '1';
+		$harga_sewa->car_class_id = '1';
+		$harga_sewa->value = '350000';
 		$harga_sewa->description = 'dasar';
 		$harga_sewa->save();
 		
 		/////
 		$harga_sewa = new Harga_sewa();
-		$harga_sewa->zone_id = 1;
-		$harga_sewa->car_class_id = 2;
-		$harga_sewa->value = 4500;
+		$harga_sewa->zone_id = '1';
+		$harga_sewa->car_class_id = '2';
+		$harga_sewa->value = '4500';
 		$harga_sewa->description = 'sopir';
 		$harga_sewa->save();
 		
 		$harga_sewa = new Harga_sewa();
-		$harga_sewa->zone_id = 1;
-		$harga_sewa->car_class_id = 2;
-		$harga_sewa->value = 4500;
+		$harga_sewa->zone_id = '1';
+		$harga_sewa->car_class_id = '2';
+		$harga_sewa->value = '4500';
 		$harga_sewa->description = 'luar kota';
 		$harga_sewa->save();
 		
 		$harga_sewa = new Harga_sewa();
-		$harga_sewa->zone_id = 1;
-		$harga_sewa->car_class_id = 2;
-		$harga_sewa->value = 45000;
+		$harga_sewa->zone_id = '1';
+		$harga_sewa->car_class_id = '2';
+		$harga_sewa->value = '45000';
 		$harga_sewa->description = 'overtime';
 		$harga_sewa->save();
 		
 		$harga_sewa = new Harga_sewa();
-		$harga_sewa->zone_id = 1;
-		$harga_sewa->car_class_id = 2;
-		$harga_sewa->value = 450000;
+		$harga_sewa->zone_id = '1';
+		$harga_sewa->car_class_id = '2';
+		$harga_sewa->value = '450000';
 		$harga_sewa->description = 'dasar';
 		$harga_sewa->save();
 		
 		$harga_antar_jemput = new Harga_antar_jemput();
-		$harga_antar_jemput->zone_id = 1;
-		$harga_antar_jemput->value = 2500;
+		$harga_antar_jemput->zone_id = '1';
+		$harga_antar_jemput->value = '2500';
 		$harga_antar_jemput->save();
 	
     }
