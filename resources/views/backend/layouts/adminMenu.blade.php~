@@ -23,7 +23,7 @@
   
   <li class="treeview">
     <a href="{{ route('admin.cars.index') }}">
-      <i class="fa fa-home"></i> <span>Kupon</span>
+      <i class="fa fa-home"></i> <span>Mobil</span>
     </a>
   </li>
 	

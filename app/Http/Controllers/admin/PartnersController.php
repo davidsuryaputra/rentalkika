@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Models\Partner;
+use App\Models\User;
+
 class PartnersController extends Controller
 {
     /**
@@ -16,9 +19,20 @@ class PartnersController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::where('role', 'partner')->get();
+        return view('backend.admin.partners.index', compact('users'));
     }
 
+	public function terima($id)
+	{
+		
+	}
+	
+	public function tolak($id)
+	{
+	
+	}
+	
     /**
      * Show the form for creating a new resource.
      *
@@ -48,7 +62,9 @@ class PartnersController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::find($id);
+        $ktp_pemilik = $user->partner->ktp_pemilik;
+        return view('backend.admin.partners.show', compact('user', 'ktp_pemilik'));
     }
 
     /**

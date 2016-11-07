@@ -12,6 +12,6 @@ class Car_class extends Model
     
     public function car()
     {
-		return $this->hasOne(Car::class);    
+		return $this->hasMany(Car::class);    
     }
 }

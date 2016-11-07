@@ -40,7 +40,7 @@
   </li>	
   
   <li class="treeview">
-  	<a href="#">
+  	<a href="{{ route('admin.partners.index') }}">
 		<i class="fa fa-home"></i> <span>Partner</span> 	
   	</a>
   </li>	

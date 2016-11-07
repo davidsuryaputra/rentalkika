@@ -11,6 +11,8 @@ class Partner extends Model
 		'zone_id',
 		'nama_pemilik',
 		'ktp_pemilik',
+		'alamat_pool',
+		'kota_pool',
     ];
     
     public function user()
@@ -21,5 +23,10 @@ class Partner extends Model
     public function zone()
     {
 		return $this->belongsTo(Zone::class);    
+    }
+    
+    public function city()
+    {
+		return $this->belongsTo(City::class, 'kota_pool');    
     }
 }

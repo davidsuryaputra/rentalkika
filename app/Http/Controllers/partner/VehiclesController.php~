@@ -65,13 +65,19 @@ class VehiclesController extends Controller
         $vehicle->car_id = $request->car_name;
         $vehicle->license_plate = $request->plat_nomor;
         $vehicle->year = $request->car_year;
+		
+		$car_id = Car::where('id', $request->car_name)->first();    
+        
+        $vehicle->car_class_id = $car_id->car_class->id;
+        $vehicle->zone_id = Auth::user()->partner->zone_id;
         $vehicle->status = 'available';
+        $vehicle->photo = "images/vehicle/".$fileName;
         $vehicle->save();
         
-        $vehicleFoto = new Vehicle_galery();
-        $vehicleFoto->path = "images/vehicle/".$fileName;
+        //$vehicleFoto = new Vehicle_galery();
+        //$vehicleFoto->path = "images/vehicle/".$fileName;
 
-		$vehicle->galery()->save($vehicleFoto);        
+		//$vehicle->galery()->save($vehicleFoto);        
         
         return redirect()->route('partner.vehicles.index')->with('success', 'Mobil berhasil ditambahkan.');
     }
@@ -124,13 +130,14 @@ class VehiclesController extends Controller
         $vehicle->car_id = $request->car_name;
         $vehicle->license_plate = $request->plat_nomor;
         $vehicle->year = $request->car_year;
+        $vehicle->photo = "images/vehicle/".$fileName;
         $vehicle->save();
         
         
-        $vehicleFoto = new Vehicle_gallery();
-        $vehicleFoto->path = "images/vehicle/".$fileName;
+        //$vehicleFoto = new Vehicle_gallery();
+        //$vehicleFoto->path = "images/vehicle/".$fileName;
 
-		$vehicle->galery()->save($vehicleFoto);
+		//$vehicle->galery()->save($vehicleFoto);
         
         return redirect()->route('partner.vehicles.index')->with('success', 'Mobil berhasil diubah.');
     }
@@ -145,8 +152,8 @@ class VehiclesController extends Controller
     {
 		$vehicle = Vehicle::where('id', $id)->where('status', 'available')->first();
 		//dd(File::exists(public_path($vehicle->galery->path)));		
-		if(File::exist(public_path($vehicle->galery->path))){
-			File::delete(public_path($vehicle->galery->path));
+		if(File::exists(public_path($vehicle->photo))){
+			File::delete(public_path($vehicle->photo));
 		}
 		$vehicle->galery()->delete();        
         $vehicle->delete();

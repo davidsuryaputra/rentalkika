@@ -11,7 +11,9 @@ class Vehicle extends Model
 		'zone_id',
 		'route_id',
 		'car_id',
+		'car_class_id',
 		'passenger_capacity',
+		'photo',
 		'license_plate',
 		'year',
 		'status',
@@ -26,6 +28,11 @@ class Vehicle extends Model
 	public function galery()
 	{
 		return $this->hasOne(Vehicle_galery::class);	
+	}
+	
+	public function partner()
+	{
+		return $this->belongsTo(Partner::class);	
 	}
 
 }

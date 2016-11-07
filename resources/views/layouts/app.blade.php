@@ -1,196 +1,207 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Dark Cyber" >
+    <link rel="shortcut icon" href="{{ url('assets/ico/favicon.ico') }}">
 
-	<!-- Facebook APP ID -->
-	<meta property="fb:app_id" content="12345"/>
+    <title>SOLID - Bootstrap 3 Theme</title>
 
-	<meta name="keywords" content="Car-Dealer, auto-salon, automobile, business, car, car-gallery, car-selling-template, cars, dealer, marketplace, mobile, real estate, responsive, sell, vehicle" />
-	<meta name="description" content="Auto Dealer HTML - Responsive HTML Auto Dealer Template" />
-
-	<!-- Open Graph -->
-	<meta property="og:site_name" content="Auto Dealer HTML"/>
-	<meta property="og:title" content="Home" />
-	<meta property="og:url" content="http://localhost/01_index.html" />
-	<meta property="og:image" content="http://cdn.winterjuice.com/example/autodealer/image.jpg" />
-	<meta property="og:description" content="Auto Dealer HTML - Responsive HTML Auto Dealer Template" />
-
-	<!-- Page Title -->
-	<title>@yield('title')</title>
 	@section('style')
-	<link rel="stylesheet" type="text/css" href="{{ url('css/style.css') }}" />
-	<link rel="stylesheet" type="text/css" href="{{ url('css/style980.css') }}" />
-	<link rel="stylesheet" type="text/css" href="{{ url('css/style800.css') }}" />
-	<link rel="stylesheet" type="text/css" href="{{ url('css/style700.css') }}" />
-	<link rel="stylesheet" type="text/css" href="{{ url('css/style600.css') }}" />
-	<link rel="stylesheet" type="text/css" href="{{ url('css/style500.css') }}" />
-	<link rel="stylesheet" type="text/css" href="{{ url('css/style400.css') }}" />
-	<link rel="stylesheet" type="text/css" href="{{ url('css/jquery.fancybox-1.3.4.css') }}" media="screen" />
-	<!--[if IE]>
-	<link href="css/style_ie.css" rel="stylesheet" type="text/css">
-	<![endif]-->
-	@show
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url('assets/css/bootstrap.css') }}" rel="stylesheet">
 
-	@section('script')
-	<script type="text/javascript" src="{{ url('js/jquery-1.8.3.min.js') }}"></script>
-	<script type="text/javascript" src="{{ url('js/jquery.easing.1.3.js') }}"></script>
-	<script type="text/javascript" src="{{ url('js/jquery.bxslider.js') }}"></script>
-	<script type="text/javascript" src="{{ url('js/jquery.mousewheel.js') }}"></script>
-	<script type="text/javascript" src="{{ url('js/jquery.selectik.js') }}"></script>
-	<script type="text/javascript" src="{{ url('js/jquery.fancybox-1.3.4.pack.js') }}"></script>
-	<script type="text/javascript" src="{{ url('js/jquery.countdown.js') }}"></script>
-	<script type="text/javascript" src="{{ url('js/jquery.checkbox.js') }}"></script>
-	<script type="text/javascript" src="{{ url('js/js.js') }}"></script>
-	@show
-</head>
-<body class="page">
-	<!--BEGIN HEADER-->
-		<div id="header">
-			<div class="top_info">
-				<div class="logo">
-					<a href="#">Auto<span>Dealer</span></a>
-				</div>
-				<div class="header_contacts">
-					<div class="phone">+1 (800) 455-55-95</div>
-					<div>WinterJuice, LLC, 1875 South Grant Street, Suite 680, San Mateo, CA 94402</div>
-				</div>
-				<div class="socials">
-					<a href="#"><img src="{{ url('images/fb_icon.png') }}" alt=""></a>
-					<a href="#"><img src="{{ url('images/twitter_icon.png') }}" alt=""></a>
-					<a href="#"><img src="{{ url('images/in_icon.png') }}" alt=""></a>
-				</div>
-			</div>
-			<div class="bg_navigation">
-				<div class="navigation_wrapper">
-					<div id="navigation">
-						<span>Home</span>
-						<ul>
-							<li class="current"><a href="#">Home</a></li>
-							<li><a href="#">About Us</a></li>
-							<li><a href="#">Blog</a></li>
-							<!-- <div class="dropdown"> -->
-							<!-- <li><a href="#">Pilih Layanan</a> -->
-								<!-- <ul class="dropdown-content"> -->
-										<li><a href="#">Rent Car</a></li>
-										<li><a href="#">Feeder</a></li>
-								<!-- </ul> -->
-							</li>
-						<!-- </div> -->
-							<!-- <li><a href="#">For Salers</a></li> -->
-							<!-- <li><a href="#">Contacts</a></li> -->
-						</ul>
-					</div>
-					<div id="search_form">
-						<form method="get" action="#">
-							<input type="text" onblur="if(this.value=='') this.value='Search on site';" onfocus="if(this.value=='Search on site') this.value='';" value="Search on site" class="txb_search"/>
-							<input type="submit" value="Search" class="btn_search"/>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	<!--EOF HEADER-->
+    <!-- Custom styles for this template -->
+    <link href="{{ url('assets/css/style.css') }}" rel="stylesheet">
+    <link href="{{ url('assets/css/font-awesome.min.css') }}" rel="stylesheet">
 
-	@yield('content')
 
-		<!--BEGIN FOOTER-->
-		<div id="footer">
-			<div class="bg_top_footer">
-				<div class="top_footer">
-					<div class="f_widget first">
-						<h3><strong>About</strong> us</h3>
-						<a href="#" class="footer_logo">AutoDealer</a>
-						<p>Lorem ipsum dolor sit amet, cons ectetur adipisicing elit, sed do eiusmod tempor.
-Lorem ipsum dolor sit amet, con sectetur adipisicing elit, sed do eius  mod tempor incididunt ut.</p>
-					</div>
-					<div class="f_widget divide second">
-						<h3><strong>Open</strong> hours</h3>
-						<ul class="schedule">
-							<li>
-								<strong>Monday</strong>
-								<span>9:30 am - 6:00 pm</span>
-							</li>
-							<li>
-								<strong>Tuesday</strong>
-								<span>9:30 am - 6:00 pm</span>
-							</li>
-							<li>
-								<strong>Wednesday</strong>
-								<span>9:30 am - 6:00 pm</span>
-							</li>
-							<li>
-								<strong>Thursday</strong>
-								<span>9:30 am - 6:00 pm</span>
-							</li>
-							<li>
-								<strong>Friday</strong>
-								<span>9:30 am - 6:00 pm</span>
-							</li>
-							<li>
-								<strong>Saturday</strong>
-								<span>9:30 am - 4:00 pm</span>
-							</li>
-							<li>
-								<strong>Sunday</strong>
-								<span>closed</span>
-							</li>
-						</ul>
-					</div>
-					<div class="fwidget_separator"></div>
-					<div class="f_widget third">
-						<h3><strong>Our</strong> contacts</h3>
-						<div class="f_contact f_contact_1"><strong>Address Info:<br/></strong>Lorem ipsum Dolor sit amet, 658 Consectetur, Adipisicing 56 D</div>
-						<div class="f_contact f_contact_2"><strong>Phone:</strong> +1 (234) 567-8901 <br/><strong>FAX:</strong> +1 (234) 567-8902</div>
-						<div class="f_contact f_contact_3"><strong>Email:</strong> <a href="mailto:#">testmail@sitename.com</a></div>
-					</div>
-					<div class="f_widget divide last frame_wrapper">
-						<iframe width="204" height="219" src="https://maps.google.com.ua/maps?f=q&amp;source=s_q&amp;hl=ruamp;hl=en&amp;geocode=&amp;q=%D0%9C%D0%B0%D0%BD%D1%85%D1%8D%D1%82%D1%82%D0%B5%D0%BD,+%D0%9D%D1%8C%D1%8E-%D0%99%D0%BE%D1%80%D0%BA,+%D0%A1%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%BD%D1%8B%D0%B5+%D0%A8%D1%82%D0%B0%D1%82%D1%8B+%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B8&amp;aq=0&amp;oq=%D0%BC%D0%B0%D0%BD%D1%85&amp;sll=48.382803,31.17461&amp;sspn=7.573826,21.643066&amp;ie=UTF8&amp;hq=&amp;hnear=%D0%9C%D0%B0%D0%BD%D1%85%D1%8D%D1%82%D1%82%D0%B5%D0%BD,+%D0%9D%D1%8C%D1%8E-%D0%99%D0%BE%D1%80%D0%BA,+%D0%9D%D1%8C%D1%8E+%D0%99%D0%BE%D1%80%D0%BA,+%D0%9D%D1%8C%D1%8E-%D0%99%D0%BE%D1%80%D0%BA,+%D0%A1%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D1%91%D0%BD%D0%BD%D1%8B%D0%B5+%D0%A8%D1%82%D0%B0%D1%82%D1%8B+%D0%90%D0%BC%D0%B5%D1%80%D0%B8%D0%BA%D0%B8&amp;t=m&amp;ll=40.79042,-73.959961&amp;spn=0.113849,0.139389&amp;z=11&amp;iwloc=A&amp;output=embed"></iframe>
-					</div>
-				</div>
-			</div>
-			<div class="bottom_footer">
-				<div class="f_widget ">
-					<h3><strong>About</strong> us</h3>
-					<ul>
-						<li><a href="#">Contact</a></li>
-						<li><a href="#">Our Partners</a></li>
-						<li><a href="#">Advertising Online</a></li>
-						<li><a href="#">Site Map</a></li>
-					</ul>
-				</div>
-				<div class="f_widget divide">
-					<h3><strong>Need</strong> help?</h3>
-					<ul>
-						<li><a href="#">How do I add an offer?</a></li>
-						<li><a href="#">How do I find a vehicle</a></li>
-						<li><a href="#">Price list</a></li>
-						<li><a href="#">Office for car dealers</a></li>
-					</ul>
-				</div>
-				<div class="fwidget_separator"></div>
-				<div class="f_widget">
-					<h3><strong>User</strong> area</h3>
-					<ul>
-						<li><a href="#">Add an offer</a></li>
-						<li><a href="#">Register dealder</a></li>
-						<li><a href="#">Login Dealer</a></li>
-						<li><a href="#">News</a></li>
-					</ul>
-				</div>
-				<div class="f_widget divide last">
-					<h3><strong>Find</strong> us here</h3>
-					<ul class="horizontal">
-						<li><a href="#"><img src="{{ url('images/fb_icon.png') }}" alt=""></a></li>
-						<li><a href="#"><img src="{{ url('images/twitter_icon.png') }}" alt=""></a></li>
-						<li><a href="#"><img src="{{ url('images/in_icon.png') }}" alt=""></a></li>
-					</ul>
-				</div>
-			</div>
-			<div class="copyright_wrapper">
-				<div class="copyright">&copy; 2013 Auto Sale. All Rights Reserved.</div>
-			</div>
-		</div>
-	<!--EOF FOOTER-->
-</body>
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <!--<script src="{{ url('assets/js/modernizr.js') }}"></script>-->
+    @show
+    
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">SOLID.</a>
+        </div>
+        <div class="navbar-collapse collapse navbar-right">
+          <ul class="nav navbar-nav">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="about.html">ABOUT</a></li>
+            <li><a href="contact.html">CONTACT</a></li>
+            <li class="dropdown active">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">LAYANAN <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">SEWA</a></li>
+                <li><a href="#">ANTAR JEMPUT</a></li>
+                <li><a href="portfolio.html">PORTFOLIO</a></li>
+                <li><a href="single-project.html">SINGLE PROJECT</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+    
+    @yield('content')
+    
+     
+	<!-- *****************************************************************************************************************
+	 FOOTER
+	 ***************************************************************************************************************** -->
+	 <div id="footerwrap">
+	 	<div class="container">
+		 	<div class="row">
+		 		<div class="col-lg-4">
+		 			<h4>About</h4>
+		 			<div class="hline-w"></div>
+		 			<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+		 		</div>
+		 		<div class="col-lg-4">
+		 			<h4>Social Links</h4>
+		 			<div class="hline-w"></div>
+		 			<p>
+		 				<a href="#"><i class="fa fa-dribbble"></i></a>
+		 				<a href="#"><i class="fa fa-facebook"></i></a>
+		 				<a href="#"><i class="fa fa-twitter"></i></a>
+		 				<a href="#"><i class="fa fa-instagram"></i></a>
+		 				<a href="#"><i class="fa fa-tumblr"></i></a>
+		 			</p>
+		 		</div>
+		 		<div class="col-lg-4">
+		 			<h4>Our Bunker</h4>
+		 			<div class="hline-w"></div>
+		 			<p>
+		 				Some Ave, 987,<br/>
+		 				23890, New York,<br/>
+		 				United States.<br/>
+		 			</p>
+		 		</div>
+		 	
+		 	</div><! --/row -->
+	 	</div><! --/container -->
+	 </div><! --/footerwrap -->
+
+@section('script')	 
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="{{ url('assets/js/bootstrap.min.js') }}"></script>
+	<script src="{{ url('assets/js/retina-1.1.0.js') }}"></script>
+	<script src="{{ url('assets/js/jquery.hoverdir.js') }}"></script>
+	<script src="{{ url('assets/js/jquery.hoverex.min.js') }}"></script>
+	<script src="{{ url('assets/js/jquery.prettyPhoto.js') }}"></script>
+  	<script src="{{ url('assets/js/jquery.isotope.min.js') }}"></script>
+  	<script src="{{ url('assets/js/custom.js') }}"></script>
+
+
+    <script>
+// Portfolio
+(function($) {
+	"use strict";
+	var $container = $('.portfolio'),
+		$items = $container.find('.portfolio-item'),
+		portfolioLayout = 'fitRows';
+		
+		if( $container.hasClass('portfolio-centered') ) {
+			portfolioLayout = 'masonry';
+		}
+				
+		$container.isotope({
+			filter: '*',
+			animationEngine: 'best-available',
+			layoutMode: portfolioLayout,
+			animationOptions: {
+			duration: 750,
+			easing: 'linear',
+			queue: false
+		},
+		masonry: {
+		}
+		}, refreshWaypoints());
+		
+		function refreshWaypoints() {
+			setTimeout(function() {
+			}, 1000);   
+		}
+				
+		$('nav.portfolio-filter ul a').on('click', function() {
+				var selector = $(this).attr('data-filter');
+				$container.isotope({ filter: selector }, refreshWaypoints());
+				$('nav.portfolio-filter ul a').removeClass('active');
+				$(this).addClass('active');
+				return false;
+		});
+		
+		function getColumnNumber() { 
+			var winWidth = $(window).width(), 
+			columnNumber = 1;
+		
+			if (winWidth > 1200) {
+				columnNumber = 5;
+			} else if (winWidth > 950) {
+				columnNumber = 4;
+			} else if (winWidth > 600) {
+				columnNumber = 3;
+			} else if (winWidth > 400) {
+				columnNumber = 2;
+			} else if (winWidth > 250) {
+				columnNumber = 1;
+			}
+				return columnNumber;
+			}       
+			
+			function setColumns() {
+				var winWidth = $(window).width(), 
+				columnNumber = getColumnNumber(), 
+				itemWidth = Math.floor(winWidth / columnNumber);
+				
+				$container.find('.portfolio-item').each(function() { 
+					$(this).css( { 
+					width : itemWidth + 'px' 
+				});
+			});
+		}
+		
+		function setPortfolio() { 
+			setColumns();
+			$container.isotope('reLayout');
+		}
+			
+		$container.imagesLoaded(function () { 
+			setPortfolio();
+		});
+		
+		$(window).on('resize', function () { 
+		setPortfolio();          
+	});
+})(jQuery);
+</script>
+@show
+
+  </body>
 </html>

@@ -42,6 +42,7 @@ class AddFk extends Migration
         Schema::table('partners', function (Blueprint $table){
         	$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         	$table->foreign('zone_id')->references('id')->on('zones')->onDelete('cascade')->onUpdate('cascade');
+        	$table->foreign('kota_pool')->references('id')->on('cities')->onDelete('cascade')->onUpdate('cascade');
         });
 
 
@@ -57,7 +58,8 @@ class AddFk extends Migration
         Schema::table('vehicles', function (Blueprint $table){
 			$table->foreign('partner_id')->references('id')->on('partners')->onDelete('cascade')->onUpdate('cascade');
 			$table->foreign('car_id')->references('id')->on('cars')->onDelete('cascade')->onUpdate('cascade');
-			//$table->foreign('zone_id')->references('id')->on('zones')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('zone_id')->references('id')->on('zones')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreign('car_class_id')->references('id')->on('car_classes')->onDelete('cascade')->onUpdate('cascade');
         });
 
         Schema::table('vehicle_galeries', function (Blueprint $table){
@@ -163,6 +165,7 @@ class AddFk extends Migration
 		Schema::table('partners', function (Blueprint $table){
   			$table->dropForeign(['user_id']);
   			$table->dropForeign(['zone_id']);
+  			$table->dropForeign(['kota_pool']);
 		});
 
 

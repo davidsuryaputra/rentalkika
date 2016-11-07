@@ -27,7 +27,7 @@ class GuestController extends Controller
 	  //$user->tambahPermission('index.post');
 	  //dd(Auth::check());      
       
-      //return view('frontend.index');
+      return view('frontend.index');
 	  //dd(Auth::check());      
       /*foreach(Auth::user()->roles as $role){
 		echo $role->name;      

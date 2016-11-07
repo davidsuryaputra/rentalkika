@@ -28,6 +28,8 @@ class PartnerUserRequest extends CreateUserRequest
         return parent::rules() + [
             'ktp_pemilik' => 'required|image',
             'nama_pemilik' => 'required',
+            'alamat_pool' => 'required',
+            'kota_pool' => 'required',
         ];
     }
 }

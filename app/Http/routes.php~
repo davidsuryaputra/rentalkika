@@ -29,20 +29,27 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/register_company', 'Auth\AuthController@postRegistrationCompany');
    
     Route::get('/register_partner', 'Auth\AuthController@showRegistrationPartnerForm');
-    Route::post('/register_partner', 'Auth\AuthController@postRegistraionPartner');
+    Route::post('/register_partner', 'Auth\AuthController@postRegistrationPartner');
     
     Route::get('/activation/{code}', 'Auth\AuthController@activation')->name('activation');
 	Route::get('/home', 'HomeController@index');
 	
+	
+	Route::get('/order_rental', 'customer\RentalController@create')->name('customer.order_rental');
+	Route::post('/order_rental/store', 'customer\RentalController@store')->name('customer.order_rental.store');
+	Route::post('/order_rental/filter', 'customer\RentalController@filter')->name('customer.order_rental.filter');
+	Route::get('/order_rental/car/{$id}/detail', 'customer\RentalController@detail')->name('customer.order_rental.detail');
+	
+	Route::post('/order_rental/cek_harga', 'customer\RentalController@cek_harga')->name('customer.order_rental.cek_harga');
+	Route::get('/order_antar_jemput', 'customer\AntarJController@create')->name('customer.order_antar_jemput');
+	Route::post('/order_antar_jemput/store', 'customer\AntarJController@store')->name('customer.order_antar_jemput');
+	
 	//customer
 	Route::group(['prefix' => 'customer', 'middleware' => ['auth', 'role:access.backend.customer']], function () {
 		
-		Route::get('/order_rental', 'customer\RentalController@create')->name('customer.order_rental');
-		Route::post('/order_rental/store', 'customer\RentalController@store')->name('customer.order_rental.store');
-		Route::get('/order_antar_jemput', 'customer\AntarJController@create')->name('customer.order_antar_jemput');
-		Route::post('/order_antar_jemput/store', 'customer\AntarJController@store')->name('customer.order_antar_jemput');
+		
 				
-		Route::get('/transactions', 'customer\TransactionsController@index')->name('');		
+		Route::get('/transactions', 'customer\TransactionsController@index')->name('customer.transactions');		
 		
 		Route::get('/', function (){
 			$user = Auth::loginUsingId(3);
@@ -71,6 +78,14 @@ Route::group(['middleware' => ['web']], function () {
 
 	//admin
 	Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:access.backend.admin']], function () {
+		
+		Route::group(['prefix' => 'partners'], function () {
+			Route::get('/', 'admin\PartnersController@index')->name('admin.partners.index');
+			Route::get('/{id}/show', 'admin\PartnersController@show')->name('admin.partners.show');
+			Route::get('/{id}/terima', 'admin\PartnerController@terima')->name('admin.partners.terima');
+			Route::get('/{id}/tolak', 'admin\PartnerController@tolak')->name('admin.partners.tolak');		
+			Route::get('/{id}/destroy', 'admin\PartnerController@destroy')->name('admin.partners.destroy');		
+		});
 		
 		Route::group(['prefix' => 'cars'], function () {
 			Route::get('/', 'admin\CarsController@index')->name('admin.cars.index');
@@ -136,7 +151,10 @@ Route::group(['middleware' => ['web']], function () {
 			Route::get('/{id}/edit', 'admin\PricingsController@zone_edit')->name('admin.pricings.zone_edit');		
 			Route::post('/store', 'admin\PricingsController@zone_store')->name('admin.pricings.zone_store');		
 			Route::post('/{id}/update', 'admin\PricingsController@zone_update')->name('admin.pricings.zone_update');
+			Route::get('/{id}/show', 'admin\PricingsController@zone_show')->name('admin.pricings.zone_show');
 			
+			
+			/*
 			//detail tarif
 			Route::get('/{zone_id}/detail', 'admin\PricingsController@show')->name('admin.pricings.show');
 			
@@ -151,7 +169,23 @@ Route::group(['middleware' => ['web']], function () {
 			Route::post('/{zone_id}/rentcar_store', 'admin\PricingsController@rentcar_store')->name('admin.pricings.rentcar_store');		
 			Route::post('/{zone_id}/rentcar_update', 'admin\PricingsController@rentcar_update')->name('admin.pricings.rentcar_update');
 			Route::get('/{zone_id}/rentcar_destroy', 'admin\PricingsController@rentcar_destroy')->name('admin.pricings.rentcar_destroy');
+			*/
 		
+			//harga sewa
+			Route::get('/sewa_create', 'admin\PricingsController@sewa_create')->name('admin.pricings.sewa_create');
+			Route::post('/sewa_store', 'admin\PricingsController@sewa_store')->name('admin.pricings.sewa_store');
+			Route::get('/{id}/sewa_edit', 'admin\PricingsController@sewa_edit')->name('admin.pricings.sewa_edit');
+			Route::post('/{id}/sewa_update', 'admin\PricingsController@sewa_update')->name('admin.pricings.sewa_update');		
+			Route::get('/{id}/sewa_destroy', 'admin\PricingsController@sewa_destroy')->name('admin.pricings.sewa_destroy');		
+
+			//harga antar jemput
+			Route::get('/antar_jemput_create', 'admin\PricingsController@antar_jemput_create')->name('admin.pricings.antar_jemput_create');
+			Route::get('/{id}/antar_jemput_edit', 'admin\PricingsController@antar_jemput_edit')->name('admin.pricings.antar_jemput_edit');
+			Route::get('/{id}/antar_jemput_destroy', 'admin\PricingsController@antar_jemput_destroy')->name('admin.pricings.antar_jemput.destroy');
+			Route::post('/antar_jemput_store', 'admin\PricingsController@antar_jemput_store')->name('admin.pricings.antar_jemput_store');			
+			Route::post('/{id}/antar_jemput_update', 'admin\PricingsController@antar_jemput_update')->name('admin.pricings.antar_jemput_update');			
+			Route::get('/{id}/antar_jemput_destroy', 'admin\PricingsController@antar_jemput_destroy')->name('admin.pricings.antar_jemput_destroy');
+					
 		});
 		
 		Route::group(['prefix' => 'users'], function () {

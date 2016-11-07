@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\User_personal;
 use App\Models\User_company;
 use App\Models\Partner;
+use App\Models\City;
 
 use Mail;
 
@@ -269,7 +270,8 @@ class AuthController extends Controller
     
     public function showRegistrationPartnerForm()
     {
-    	return view('auth.register_partner');
+    	$cities = City::all();
+    	return view('auth.register_partner', compact('cities'));
     }
     
     public function postRegistrationPartner(PartnerUserRequest $request)
@@ -278,10 +280,10 @@ class AuthController extends Controller
 		$fullPathKtpPemilik = "images/partner/".rand(0, 99999).$ktp_pemilik->getClientOriginalName();
 		
 		if($request->hasFile('ktp_pemilik') && $request->file('ktp_pemilik')->isValid()) {
-			$request->file('ktp_pemilik')->move($fullpathKtpPemilik);
+			$request->file('ktp_pemilik')->move($fullPathKtpPemilik);
 		}    
     
-    	$activation_code = str_random(0, 30);
+    	$activation_code = str_random(30);
     	
 		$userPartner = new User();
 		$userPartner->full_name = $request->full_name;
@@ -290,12 +292,20 @@ class AuthController extends Controller
 		$userPartner->email = $request->email;
 		$userPartner->password = bcrypt($request->password);
 		$userPartner->activation_code = $activation_code;		
+		$userPartner->role = 'partner';
 		$userPartner->status_id = 1;
 		$userPartner->balance = 0;
 		$userPartner->save();
 		
 		$partner = new Partner();
 		$partner->nama_pemilik = $request->nama_pemilik;
+		
+		$zone_city = City::find($request->kota_pool);
+		
+		$partner->zone_id = $zone_city->zone->id;
+		$partner->kota_pool = $request->kota_pool;
+		$partner->alamat_pool = $request->alamat_pool;
+		$partner->layanan_sopir = $request->layanan_sopir;
 		$partner->ktp_pemilik = $fullPathKtpPemilik;
 		
 		$userPartner->partner()->save($partner);
@@ -310,7 +320,7 @@ class AuthController extends Controller
         });	
 		        
         Session::flash('success', 'Please check your email to follow next instruction.');
-        return redirect('/register');
+        return redirect('/register_partner');
     	
     }
 }

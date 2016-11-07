@@ -6,6 +6,15 @@ use App\Models\User;
 use App\Models\User_personal;
 use App\Models\User_company;
 use App\Models\Partner;
+use App\Models\Zone;
+use App\Models\City;
+use App\Models\Harga_sewa;
+use App\Models\Harga_antar_jemput;
+use App\Models\Car_brand;
+use App\Models\Car_class;
+use App\Models\Car;
+use App\Models\Vehicle;
+use Illuminate\Facades\Support\Auth;
 
 class BaseTableSeeder extends Seeder
 {
@@ -16,6 +25,7 @@ class BaseTableSeeder extends Seeder
      */
     public function run()
     {
+    	/*
 		DB::table('cities')->insert([
 			['id' => 1, 'name' => 'Surabaya'],		
 			['id' => 2, 'name' => 'Sidoarjo'],		
@@ -23,6 +33,7 @@ class BaseTableSeeder extends Seeder
 			['id' => 4, 'name' => 'Gresik'],		
 			['id' => 5, 'name' => 'Madura'],		
 		]);    	
+		*/
     	
         DB::table('roles')->insert([
           ['id' => 1, 'name' => 'customer'],
@@ -68,6 +79,17 @@ class BaseTableSeeder extends Seeder
           ['id' => 2, 'name' => 'pph', 'value' => 10],
         ]);
         
+        $zone = new Zone();
+		$zone->name = 'Sekitar Sby';
+		$zone->save();
+		
+		$zone->cities()->saveMany([
+			new App\Models\City(['name' => 'Surabaya']),
+			new App\Models\City(['name' => 'Sidoarjo']),
+			new App\Models\City(['name' => 'Gresik']),
+			new App\Models\City(['name' => 'Madura']),
+			new App\Models\City(['name' => 'Malang'])
+		]);
         
 		
 		//cara 2
@@ -121,6 +143,9 @@ class BaseTableSeeder extends Seeder
 		
 		$partner = new Partner();
 		$partner->nama_pemilik = 'Joko Budiono';
+		$partner->zone_id = 1;
+		$partner->kota_pool = 1;
+		$partner->alamat_pool = 'JL. Pool';
 		$userPartner->partner()->save($partner);
 		$userPartner->tambahPermission('access.backend.partner');
 		
@@ -162,5 +187,126 @@ class BaseTableSeeder extends Seeder
 		$personal->save();
 		*/
 		
+		
+		
+		
+//		$city = new City();
+		
+		
+		$car_brand = new Car_brand();
+		$car_brand->name = 'Honda';
+		$car_brand->save();
+		
+		$car_class = new Car_class();
+		$car_class->name = 'MPV';
+		$car_class->save();
+		
+		$car = new Car();
+		$car->name = 'Honda Jazz';
+		$car->car_class()->associate($car_class);
+		$car->brand()->associate($car_brand);
+		$car->save();
+		
+		
+		$vehicle = new Vehicle();
+		$vehicle->partner_id = 1;
+		$vehicle->car_id = 1;
+		$vehicle->zone_id = 1;
+		$vehicle->car_class_id = 1;
+		$vehicle->license_plate = 'L 5758 X';
+		$vehicle->status = 'available';
+		$vehicle->year = '2013';
+		$vehicle->save();
+		
+		
+		
+		$car_brand2 = new Car_brand();
+		$car_brand2->name = 'Toyota';
+		$car_brand2->save();		
+		
+		$car_class2 = new Car_class();
+		$car_class2->name = 'BOX';
+		$car_class2->save();
+		
+		$car = new Car();
+		$car->name = 'Kijang box';
+		$car->car_class()->associate($car_class2);
+		$car->brand()->associate($car_brand2);
+		$car->save();
+		
+		$vehicle = new Vehicle();
+		$vehicle->partner_id = 1;
+		$vehicle->car_id = 2;
+		$vehicle->zone_id = 1;
+		$vehicle->car_class_id = 2;
+		$vehicle->license_plate = 'L 5756 X';
+		$vehicle->year = '2012';
+		$vehicle->status = 'available';
+		$vehicle->save();
+		
+		
+		
+		$harga_sewa = new Harga_sewa();
+		$harga_sewa->zone_id = 1;
+		$harga_sewa->car_class_id = 1;
+		$harga_sewa->value = 3500;
+		$harga_sewa->description = 'sopir';
+		$harga_sewa->save();
+		
+		$harga_sewa = new Harga_sewa();
+		$harga_sewa->zone_id = 1;
+		$harga_sewa->car_class_id = 1;
+		$harga_sewa->value = 3500;
+		$harga_sewa->description = 'luar kota';
+		$harga_sewa->save();
+		
+		$harga_sewa = new Harga_sewa();
+		$harga_sewa->zone_id = 1;
+		$harga_sewa->car_class_id = 1;
+		$harga_sewa->value = 35000;
+		$harga_sewa->description = 'overtime';
+		$harga_sewa->save();
+		
+		$harga_sewa = new Harga_sewa();
+		$harga_sewa->zone_id = 1;
+		$harga_sewa->car_class_id = 1;
+		$harga_sewa->value = 350000;
+		$harga_sewa->description = 'dasar';
+		$harga_sewa->save();
+		
+		/////
+		$harga_sewa = new Harga_sewa();
+		$harga_sewa->zone_id = 1;
+		$harga_sewa->car_class_id = 2;
+		$harga_sewa->value = 4500;
+		$harga_sewa->description = 'sopir';
+		$harga_sewa->save();
+		
+		$harga_sewa = new Harga_sewa();
+		$harga_sewa->zone_id = 1;
+		$harga_sewa->car_class_id = 2;
+		$harga_sewa->value = 4500;
+		$harga_sewa->description = 'luar kota';
+		$harga_sewa->save();
+		
+		$harga_sewa = new Harga_sewa();
+		$harga_sewa->zone_id = 1;
+		$harga_sewa->car_class_id = 2;
+		$harga_sewa->value = 45000;
+		$harga_sewa->description = 'overtime';
+		$harga_sewa->save();
+		
+		$harga_sewa = new Harga_sewa();
+		$harga_sewa->zone_id = 1;
+		$harga_sewa->car_class_id = 2;
+		$harga_sewa->value = 450000;
+		$harga_sewa->description = 'dasar';
+		$harga_sewa->save();
+		
+		$harga_antar_jemput = new Harga_antar_jemput();
+		$harga_antar_jemput->zone_id = 1;
+		$harga_antar_jemput->value = 2500;
+		$harga_antar_jemput->save();
+	
     }
 }

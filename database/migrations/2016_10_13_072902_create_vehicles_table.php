@@ -16,7 +16,14 @@ class CreateVehiclesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('partner_id');
 			$table->unsignedInteger('car_id');
-			//$table->unsignedInteger('zone_id');
+			$table->unsignedInteger('zone_id');
+			$table->unsignedInteger('car_class_id');
+			//$table->string('car_brand');
+			//$table->string('car_class');
+			//$table->string('car_name');
+			//$table->string('posisi_kota');
+			//$table->string('lokasi_pool');
+			$table->string('photo')->nullable();
 			//$table->unsignedInteger('route_id');
 			//$table->integer('passenger_capacity');
 			$table->string('license_plate');

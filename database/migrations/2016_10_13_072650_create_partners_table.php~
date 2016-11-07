@@ -16,8 +16,11 @@ class CreatePartnersTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('zone_id')->nullable();
+            $table->string('layanan_sopir');
 			$table->string('nama_pemilik');
 			$table->string('ktp_pemilik')->nullable();
+			$table->string('alamat_pool');
+			$table->unsignedInteger('kota_pool');
             $table->timestamps();
         });
     }

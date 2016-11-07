@@ -19,6 +19,8 @@ class CreatePartnersTable extends Migration
             $table->string('layanan_sopir');
 			$table->string('nama_pemilik');
 			$table->string('ktp_pemilik')->nullable();
+			$table->string('alamat_pool')->nullable();
+			$table->unsignedInteger('kota_pool')->nullable();
             $table->timestamps();
         });
     }

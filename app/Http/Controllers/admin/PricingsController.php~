@@ -8,14 +8,20 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Http\Requests\CreateZoneRequest;
-use App\Http\Requests\CreatePricingFeederRequest;
-use App\Http\Requests\CreatePricingRentcarRequest;
+//use App\Http\Requests\CreatePricingFeederRequest;
+//use App\Http\Requests\CreatePricingRentcarRequest;
+use App\Http\Requests\HargaSewaRequest;
+use App\Http\Requests\HargaAntarJemputRequest;
+
 
 use App\Models\Zone;
+use App\Models\Car_class;
 use App\Models\City;
-use App\Models\Pricing;
-use App\Models\Pricing_option;
-use App\Models\Route;
+use App\Models\Harga_sewa;
+use App\Models\Harga_antar_jemput;
+//use App\Models\Pricing;
+//use App\Models\Pricing_option;
+//use App\Models\Route;
 
 class PricingsController extends Controller
 {
@@ -27,7 +33,9 @@ class PricingsController extends Controller
     public function zone_index()
     {
     	$zones = Zone::all();
-        return view('backend.admin.pricings.zone_index', compact('zones')); 
+    	$sewa_pricings = Harga_sewa::all();
+    	$antar_jemput_pricings = Harga_antar_jemput::all();
+        return view('backend.admin.pricings.zone_index', compact('zones', 'sewa_pricings', 'antar_jemput_pricings')); 
     }
 
     /**
@@ -88,6 +96,12 @@ class PricingsController extends Controller
         return view('backend.admin.pricings.show', compact('rentcar_pricing_exist', 'zone', 'pricing_feeders'));
     }
 
+	public function zone_show($id)
+	{
+		$zone = Zone::find($id);
+		return view('backend.admin.pricings.zone_show', compact('zone'));	
+	}
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -129,6 +143,7 @@ class PricingsController extends Controller
         return redirect()->route('admin.pricings.zone_index')->with('success', 'Zona berhasil diupdate.');
     }
     
+    /*
     public function feeder_create($zoneid)
     {
     	$zone = Zone::find($zoneid);
@@ -187,17 +202,18 @@ class PricingsController extends Controller
     	
     	return redirect()->route('admin.pricings.show', $zoneid)->with('success', 'Tarif feeder berhasil diupdate.');
     }
-
+*/
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+     /*
     public function feeder_destroy($zoneid, $pricingfeederid)
     {
         $pricing_feeder = Pricing::find($pricingfeederid)->where('zone_id', $zoneid)->where('is_service_feeder', 1)->first();
-        $pricing_feeder->route[1]->delete();
+        $pricing_feeder->route->delete();
         $pricing_feeder->delete();
         
         return redirect()->route('admin.pricings.show', $zoneid)->with('success', 'Tarif feeder berhasil dihapus.');
@@ -283,5 +299,123 @@ class PricingsController extends Controller
     	Pricing::where('zone_id', $zoneid)->where('is_service_feeder', 0)->delete();
     	Pricing_option::where('zone_id', $zoneid)->delete();
     	return redirect()->route('admin.pricings.show', $zoneid)->with('success', 'Tarif Rentcar berhasil dihapus.');
+    }
+    */
+    
+    //harga sewa
+    public function sewa_create()
+    {
+    	$zones = Zone::all();
+    	$car_classes = Car_class::all();
+    	return view('backend.admin.pricings.sewa_create', compact('zones', 'car_classes'));
+    }
+    
+    public function sewa_store(HargaSewaRequest $request)
+    {
+    	$harga_sewa_exist = Harga_sewa::where('zone_id', $request->zone_name)
+    	->where('car_class_id', $request->car_class)
+    	->where('description', $request->keterangan)
+    	->first();
+    	
+    	if($harga_sewa_exist){
+    		return redirect()->route('admin.pricings.zone_index')->with('error', 'Harga sudah ada.');
+    	}
+    	
+    	$harga_sewa = new Harga_sewa();
+    	$harga_sewa->zone_id = $request->zone_name;
+    	$harga_sewa->car_class_id = $request->car_class;
+    	$harga_sewa->value = $request->value;
+    	$harga_sewa->description = $request->keterangan;
+    	$harga_sewa->save();
+    	
+    	return redirect()->route('admin.pricings.zone_index')->with('success', 'Harga berhasil dibuat.');
+    }
+    
+    public function sewa_edit($id)
+    {
+    	$harga_sewa = Harga_sewa::find($id);
+    	$zones = Zone::all();
+    	$car_classes = Car_class::all();
+    	
+    	return view('backend.admin.pricings.sewa_edit', compact('harga_sewa', 'zones', 'car_classes'));
+    }
+    
+    public function sewa_update(HargaSewaRequest $request, $id)
+    {
+    	/*
+    	$harga_sewa_exist = Harga_sewa::where('zone_id', $request->zone_name)
+    	->where('car_class_id', $request->car_class)
+    	->where('description', $request->keterangan)
+    	->first();
+    	
+    	if($harga_sewa_exist){
+    		return redirect()->route('admin.pricings.zone_index')->with('error', 'Harga sudah ada.');
+    	}
+    	*/
+    	
+    	$harga_sewa = Harga_sewa::find($id);
+    	$harga_sewa->zone_id = $request->zone_name;
+    	$harga_sewa->car_class_id = $request->car_class;
+    	$harga_sewa->value = $request->value;
+    	$harga_sewa->description = $request->keterangan;
+    	$harga_sewa->save();
+    	
+    	return redirect()->route('admin.pricings.zone_index')->with('success', 'Harga berhasil diubah.');
+    }
+    
+    public function sewa_destroy($id)
+    {
+    	Harga_sewa::destroy($id);
+    	return redirect()->route('admin.pricings.zone_index')->with('success', 'Harga berhasil dihapus.');
+    }
+    
+    //harga antar jemput
+    public function antar_jemput_create()
+    {
+    	$zones = Zone::all();
+    	return view('backend.admin.pricings.antar_jemput_create', compact('zones'));
+    }
+    
+    public function antar_jemput_store(HargaAntarJemputRequest $request)
+    {
+    	$antar_jemput_exist = Harga_antar_jemput::where('zone_id', $request->value)->first();
+    	if($antar_jemput_exist) {
+    		return redirect()->route('admin.pricings.zone_index')->with('error', 'Harga sudah ada.');
+    	}
+    	
+    	$antar_jemput = new Harga_antar_jemput();
+    	$antar_jemput->zone_id = $request->zone_name;
+    	$antar_jemput->value = $request->value;
+    	$antar_jemput->save();
+    	
+    	return redirect()->route('admin.pricings.zone_index')->with('success', 'Harga berhasil dibuat.'); 
+    }
+    
+    public function antar_jemput_edit($id)
+    {
+    	$harga_antar_jemput = Harga_antar_jemput::find($id);
+    	$zones = Zone::all();
+    	return view('backend.admin.pricings.zone_index', compact('harga_antar_jemput', 'zones'));
+    }
+    
+    public function antar_jemput_update(HargaAntarJemputRequest $request, $id)
+    {
+    	$antar_jemput_exist = Harga_antar_jemput::where('zone_id', $request->value)->first();
+    	if($antar_jemput_exist) {
+    		return redirect()->route('admin.pricings.zone_index')->with('error', 'Harga sudah ada.');
+    	}
+    	
+    	$antar_jemput = Harga_antar_jemput::find($id);
+    	$antar_jemput->zone_id = $request->zone_name;
+    	$antar_jemput->value = $request->value;
+    	$antar_jemput->save();
+    	
+    	return redirect()->route('admin.pricings.zone_index')->with('success', 'Harga berhasil diubah.'); 
+    }
+    
+    public function antar_jemput_destroy($id)
+    {
+    	Harga_antar_jemput::destroy($id);
+    	return redirect()->route('admin.pricings.zone_index')->with('success', 'Harga berhasil dihapus.');
     }
 }
