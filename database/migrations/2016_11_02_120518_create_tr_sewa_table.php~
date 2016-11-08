@@ -17,11 +17,12 @@ class CreateTrSewaTable extends Migration
             $table->unsignedInteger('partner_id');
             $table->unsignedInteger('client_id');
             $table->unsignedInteger('vehicle_id');
-            $table->unsignedInteger('coupon_id');
+            $table->unsignedInteger('coupon_id')->nullable;
             $table->unsignedInteger('from_city_id');
             $table->unsignedInteger('to_city_id');
-            $table->integer('ppn');
-            $table->integer('pph');
+            $table->unsignedInteger('ppn');
+            $table->unsignedInteger('pph');
+            $table->string('alamat_pengiriman')->nullable();
             $table->timestamp('rent_start');
             $table->timestamp('rent_expired');
             $table->timestamp('rent_return')->nullable();

@@ -275,8 +275,6 @@ class BaseTableSeeder extends Seeder
 		$harga_sewa->save();
 		
 		/////
-		
-		
 		$harga_sewa = new Harga_sewa();
 		$harga_sewa->zone_id = 1;
 		$harga_sewa->car_class_id = 2;

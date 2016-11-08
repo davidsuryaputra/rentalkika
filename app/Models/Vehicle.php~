@@ -13,6 +13,7 @@ class Vehicle extends Model
 		'car_id',
 		'car_class_id',
 		'passenger_capacity',
+		'photo',
 		'license_plate',
 		'year',
 		'status',
@@ -32,6 +33,13 @@ class Vehicle extends Model
 	public function partner()
 	{
 		return $this->belongsTo(Partner::class);	
+	}
+	
+	public function scopeHargaSewa($query)
+	{
+		return $query->rightJoin('harga_sewa', function ($join){
+			$join->on('vehicles.car_class_id', '=', 'harga_sewa.car_class_id');
+		});	
 	}
 
 }

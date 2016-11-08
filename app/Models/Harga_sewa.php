@@ -18,4 +18,9 @@ class Harga_sewa extends Model
     {
 		return $this->belongsTo(Car_class::class);    
     }
+    
+    public function tr_sewa()
+    {
+		return $this->belongsToMany(tr_sewa::class);    
+    }
 }

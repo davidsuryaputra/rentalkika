@@ -43,4 +43,9 @@ class tr_sewa extends Model
     {
 		return $this->belongsTo(Coupon::class);    
     }
+    
+    public function harga_sewa()
+    {
+		return $this->belongsToMany(Harga_sewa::class, 'tr_sewa_harga_sewa', 'tr_sewa_id', 'harga_sewa_id');    
+    }
 }

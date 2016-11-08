@@ -34,5 +34,13 @@ class Vehicle extends Model
 	{
 		return $this->belongsTo(Partner::class);	
 	}
+	
+	public function scopeHargaSewa($query)
+	{
+		return $query->rightJoin('harga_sewa', function ($join){
+			$join->on('vehicles.car_class_id', '=', 'harga_sewa.car_class_id');
+			$join->on('vehicles.zone_id', '=', 'harga_sewa.zone_id');
+		});	
+	}
 
 }

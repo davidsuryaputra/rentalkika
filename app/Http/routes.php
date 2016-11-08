@@ -36,11 +36,11 @@ Route::group(['middleware' => ['web']], function () {
 	
 	
 	Route::get('/order_rental', 'customer\RentalController@create')->name('customer.order_rental');
-	Route::post('/order_rental/store', 'customer\RentalController@store')->name('customer.order_rental.store');
+	Route::post('/order_rental/{id}/store', 'customer\RentalController@store')->name('customer.order_rental.store');
 	Route::post('/order_rental/filter', 'customer\RentalController@filter')->name('customer.order_rental.filter');
 	Route::get('/order_rental/car/{id}/detail', 'customer\RentalController@detail')->name('customer.order_rental.detail');
 	
-	Route::post('/order_rental/cek_harga', 'customer\RentalController@cek_harga')->name('customer.order_rental.cek_harga');
+	Route::post('/order_rental/{id}/cek_harga', 'customer\RentalController@cek_harga')->name('customer.order_rental.cek_harga');
 	Route::get('/order_antar_jemput', 'customer\AntarJController@create')->name('customer.order_antar_jemput');
 	Route::post('/order_antar_jemput/store', 'customer\AntarJController@store')->name('customer.order_antar_jemput');
 	

@@ -64,7 +64,8 @@ a {
 a:hover,
 a:focus {
   text-decoration: none;
-  color:#01b2fe;
+  #color:#01b2fe;
+  color:#01b200;
 }
 
 ::-moz-selection  {
@@ -121,11 +122,12 @@ a:focus {
 }
 
 .dropdown-menu {
-	background: #384452;
+	#background: #384452;
+	background: #ffffff;
 }
 
 .dropdown-menu > li > a {
-	color: white;
+	color: black;
 	font-weight: 700;
 	font-size: 12px;
 }
